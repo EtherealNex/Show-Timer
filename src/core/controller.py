@@ -1,17 +1,40 @@
 # The Backend controller for show timer
+
 from src.ui.views.pre_show_view import PreShowView
 from src.ui.views.main_show_view import MainShowView
+
+from src.ui.widgets.setting_window_widget import SettingsWindow
+from src.ui.widgets.show_stats_widget import ShowStats
 
 class AppController:
     def __init__(self, main_window, context):
         self.main_window = main_window
         self.context = context
 
-    def load_initial_view(self):
-        view = PreShowView(self.context, self)
-        self.main_window.set_view(view)
 
-    def start_show(self):
-        print("Started Show")
-        view = MainShowView(self.context, self)
-        self.main_window.set_view(view)
+    """ -- SETUP -- """
+    def load_initial_view(self):
+        """Sets the applications UI to the initial state"""
+        view = PreShowView(self.context, self)
+        self.main_window._set_view(view)
+
+
+    """ -- SETTINGS WINDOW -- """
+    def open_setting_window(self):
+        if not self.context.settings_window_open:
+            self.context.settings_window_open = True
+            settings_window = SettingsWindow(self.context, self)
+
+    def on_settings_destory(self, event):
+        self.context.settings_window_open = False
+
+
+    """ -- STATS WINDOW -- """
+    def open_stats_window(self):
+        if not self.context.show_stats_window_open:
+            self.context.show_stats_window_open = True
+            stats_window = ShowStats(self.context, self)
+
+    def on_stats_window_destory(self, event):
+        self.context.show_stats_window_open = False
+

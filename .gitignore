@@ -173,5 +173,8 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+# MacOS stuff
+*.DS_Store
+
 # REMOVE WHEN APP IS MADE
 app.py

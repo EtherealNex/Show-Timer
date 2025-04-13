@@ -2,4 +2,6 @@
 
 class AppContext:
     def __init__(self):
-        pass
+        # Settings window open
+        self.settings_window_open = False
+        self.show_stats_window_open = False
