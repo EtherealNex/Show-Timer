@@ -6,10 +6,11 @@ class MainWindow(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Show Timer")
-        self.geometry("800x600")
+        self.geometry("800x500")
         self._current_view = None
 
-    def set_view(self, view: tk.Frame):
+    # This code will handle UI changing
+    def _set_view(self, view: tk.Frame):
         if self._current_view:
             self._current_view.destroy()
         
