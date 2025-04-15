@@ -3,10 +3,13 @@ import tkinter as tk
 
 class PreShowView(tk.Frame):
     def __init__(self, context, controller):
+
+        # Setup
         super().__init__()
         self.context = context
         self.controller = controller
 
+        # Window UI
         """ -- CALL FRAME -- """
 
         self.call_frame = tk.Frame(self)
@@ -36,8 +39,8 @@ class PreShowView(tk.Frame):
         title_label = tk.Label(self.center_frame, text="Show Timer", font=("Helvetica", 48))
         title_label.pack(pady=(0,5))
 
-        local_timer_label = tk.Label(self.center_frame, text="00:00:00", font=("Helvetica", 42), fg="lightgrey")
-        local_timer_label.pack()
+        self.local_timer_label = tk.Label(self.center_frame, text="00:00:00", font=("Helvetica", 42), fg="lightgrey")
+        self.local_timer_label.pack()
 
         """ -- BOTTOM BUTTONS -- """
 
