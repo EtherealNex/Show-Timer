@@ -20,8 +20,17 @@ class AppController:
         """Sets the applications UI to the initial state"""
         self.main_window._set_view(self.pre_show_view)
 
+    """ -- START SHOW -- """
+    def start_show(self):
+        ... # Code for starting the show and other logic
+        self.main_show_view.reset_state()
+        self.main_window._set_view(self.main_show_view)
 
-    """ -- SETTINGS WINDOW -- """
+
+    """ -- WIDGET WINDOW LOGIC -- """
+
+    # SETTINGS
+
     #Open the window
     def open_setting_window(self):
         if not self.context.settings_window_open:
@@ -32,8 +41,8 @@ class AppController:
     def on_settings_destory(self, event):
         self.context.settings_window_open = False
 
+    # STATS
 
-    """ -- STATS WINDOW -- """
     # Open the window
     def open_stats_window(self):
         if not self.context.show_stats_window_open:

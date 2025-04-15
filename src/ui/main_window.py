@@ -12,7 +12,10 @@ class MainWindow(tk.Tk):
     # This code will handle UI changing
     def _set_view(self, view: tk.Frame):
         if self._current_view:
+            for widget in self._current_view.winfo_children():
+                widget.destroy()
             self._current_view.destroy()
         
         self._current_view = view
         self._current_view.pack(fill='both', expand=True)
+        self.update_idletasks()
