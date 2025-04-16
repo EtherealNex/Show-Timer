@@ -58,6 +58,3 @@ class PreShowView(tk.Frame):
 
         settings_window_button = tk.Button(self.button_frame, text="Settings", font=("Helvetica", 14), width=10, command=controller.open_setting_window)
         settings_window_button.grid(column=1, row=0, padx=5)
-
-
-    # Back end connector

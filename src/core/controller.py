@@ -11,19 +11,32 @@ class AppController:
         self.main_window = main_window
         self.context = context
 
-        # Initilise all windows
+        # Initilise all frames
         self.pre_show_view = PreShowView(context=context, controller=self)
         self.main_show_view = MainShowView(context=context, controller=self)
+
+
+    """ -- GENERIC WINDOW FUNCTIONS -- """
+    def clear_widgets(self, window_frame):
+        for widget in window_frame.winfo_children():
+            widget.destroy()
+        window_frame.update_idletasks()
+
 
     """ -- SETUP INIT WINDOW -- """
     def load_initial_view(self):
         """Sets the applications UI to the initial state"""
+        self.clear_widgets(self.pre_show_view)
+        self.pre_show_view.__init__(context=self.context, controller=self)
         self.main_window._set_view(self.pre_show_view)
 
     """ -- START SHOW -- """
     def start_show(self):
         ... # Code for starting the show and other logic
-        self.main_show_view.reset_state()
+
+        # Clear the window, refresh the frame, set the view 
+        self.clear_widgets(self.main_show_view)
+        self.main_show_view.__init__(context=self.context, controller=self)
         self.main_window._set_view(self.main_show_view)
 
 

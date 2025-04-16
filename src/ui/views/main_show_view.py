@@ -35,11 +35,3 @@ class MainShowView(tk.Frame):
 
         next_segment_button = tk.Button(self, text="Next Seg", width=15, borderwidth=2)
         next_segment_button.pack(side='bottom', pady=20)
-
-        
-    # back end testing // RELOOK AT and fix code to be cleaner
-    def reset_state(self):
-        # Clean up widgets that wont be catched
-        for widget in self.winfo_children():
-            widget.destroy()
-        self.__init__(context=self.context, controller=self.controller)
