@@ -50,7 +50,7 @@ class PreShowView(tk.Frame):
         start_frame = tk.Frame(self)
         start_frame.pack(side='bottom', pady=0)
 
-        start_show_button = tk.Button(start_frame, text="Start Show", font=("Helvetica", 14), width=20, command=self.controller.start_show)
+        start_show_button = tk.Button(start_frame, text="Start Show", font=("Helvetica", 14), width=20, command=self.controller.change_to_main_show_view)
         start_show_button.pack(anchor='center')
 
         view_show_stats = tk.Button(self.button_frame, text='Show Stats', font=("Helvetica", 14), width=10, command=controller.open_stats_window)

@@ -33,5 +33,5 @@ class MainShowView(tk.Frame):
         # This will need some code to change the text depending on what comes next, either interval or end of show
         # A backend function will have to change the label on this button depedning on what is next either 'act down' or 'end show'
 
-        next_segment_button = tk.Button(self, text="Next Seg", width=15, borderwidth=2)
-        next_segment_button.pack(side='bottom', pady=20)
+        self.next_segment_button = tk.Button(self, text="Next Seg", width=15, borderwidth=2)
+        self.next_segment_button.pack(side='bottom', pady=20)
