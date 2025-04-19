@@ -27,7 +27,7 @@ class PreShowView(tk.Frame):
         current_call_label = tk.Label(self.call_frame, text="Current Call:", font=("Helvetica", 16))
         current_call_label.pack(pady=2)
 
-        current_call_timer_lable = tk.Label(self.call_frame, text="", font=("Helvetica",0), fg='lightgrey')
+        current_call_timer_lable = tk.Label(self.call_frame, text="00:00:00", font=("Helvetica", 36), fg='lightgrey')
         current_call_timer_lable.pack(pady=0)
 
 
