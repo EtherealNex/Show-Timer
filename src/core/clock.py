@@ -235,6 +235,7 @@ class LocalTime:
         self._current_time = time.localtime()
 
         self._lock = threading.Lock()
+        self._last_formatted_time = ""
 
         if not isinstance(update_rate, (int, float)):
             raise TypeError(f'Update rate expected int or float, got {type(update_rate).__name__}')
@@ -251,6 +252,8 @@ class LocalTime:
         while self._running:
             with self._lock:
                 self._current_time = time.localtime()
+                self._last_formatted_time = time.strftime("%H:%M:%S", self._current_time)
+
             time.sleep(self.update_rate)
     
     def stop(self):
@@ -263,14 +266,8 @@ class LocalTime:
             raise TypeError(f'in_centi expected bool, got {type(in_centi).__name__}')
         
         with self._lock:
-            formatted_time = time.strftime("%H:%M:%S", self._current_time)
-
-            if in_centi:
-                # Add centiseconds
-                centiseconds = int(self._current_time.tm_sec * 100 % 100)
-                return f"{formatted_time}:{centiseconds:02}"
-            
-            return formatted_time
+            return(time.strftime("%H:%M:%S",time.localtime()))
+            #return self._last_formatted_time
 
 if __name__ == "__main__":
     # Test the stopwatch

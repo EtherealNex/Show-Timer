@@ -20,8 +20,8 @@ class IntervalView(tk.Frame):
         interval_timer_label = tk.Label(self.center_frame, text="00:00:00", font=("Helvetica", 48))
         interval_timer_label.pack(pady=(0,5))
 
-        local_timer_label = tk.Label(self.center_frame, text="00:00:00", font=("Helvetica", 42), fg='lightgrey')
-        local_timer_label.pack()
+        self.local_timer_label = tk.Label(self.center_frame, text="00:00:00", font=("Helvetica", 42), fg='lightgrey')
+        self.local_timer_label.pack()
 
         end_interval_button = tk.Button(self, text="End Interval", font=("Helvetica", 14), width=15, command=self.controller.change_to_main_show_view)
         end_interval_button.pack(side='bottom', pady=20)

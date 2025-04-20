@@ -34,10 +34,10 @@ class PreShowView(tk.Frame):
         """ -- CENTER LABEL AND GLOBAL TIMER -- """
 
         self.center_frame = tk.Frame(self)
-        self.center_frame.place(relx=0.5,rely=0.5, anchor='center')
+        self.center_frame.place(relx=0.5, rely=0.5, anchor='center')
 
         title_label = tk.Label(self.center_frame, text="Show Timer", font=("Helvetica", 48))
-        title_label.pack(pady=(0,5))
+        title_label.pack(pady=(0, 5))
 
         self.local_timer_label = tk.Label(self.center_frame, text="00:00:00", font=("Helvetica", 42), fg="lightgrey")
         self.local_timer_label.pack()

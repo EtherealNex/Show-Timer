@@ -6,7 +6,7 @@ class AppContext:
     def __init__(self):
         
         # Local time
-        self.local_time_update_interval = 250 # in ms
+        self.local_time_update_interval = 10
         self.local_time = LocalTime()
 
         # Interval context
