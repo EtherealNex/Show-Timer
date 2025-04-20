@@ -19,9 +19,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# Local timer must have a way to globalise it as we keep creating a new one for each frame
-# Possibly one in context that can be called when needed, and updated by controller
-# This would remove the need for it to be managed within each frame
-
-# Manage it in main window? / Context
