@@ -96,6 +96,60 @@ class AppController:
             self.main_window._current_view.after_cancel(self._update_local_clock)
 
 
+    """ -- SHOW CALL LOGIC -- """
+    def load_start_next_call(self):
+        # Load the Call timer, increment the call index, move on 
+
+        # Check to see if a call timer is avalible to be used
+        if self.context.current_call_index >= len(self.context.settings_pre_show_calls):
+            # Update UI
+            if hasattr(self.main_window._current_view, 'current_call_label'):
+                self.main_window._current_view.current_call_label.config(
+                    text=f'No Calls Remaining'
+            )
+            # Exit Loop
+            return
+        
+        # A call can be done
+        self.end_call_timer()
+        next_call = self.context.settings_pre_show_calls[self.context.current_call_index]
+        self.context.active_call_timer_object.__init__(time=next_call.duration, overflow=False)
+
+        # Set the current call label
+        if hasattr(self.main_window._current_view, 'current_call_label'):
+            self.main_window._current_view.current_call_label.config(
+                text=f'Current Call: {next_call.label}'
+            )
+        
+        # Set the next call label
+        if hasattr(self.main_window._current_view, 'next_call_label'):
+            if self.context.current_call_index + 1 >= len(self.context.settings_pre_show_calls):
+                next_call = "N/A"
+            else:
+                next_call = f'{(self.context.settings_pre_show_calls[self.context.current_call_index + 1]).label}'
+            self.main_window._current_view.next_call_label.config(
+                text=f'Next Call: {next_call}'
+            )
+
+        self.context.active_call_timer_object.start()
+        self.context.current_call_index += 1
+        self._update_current_call()
+
+    def _update_current_call(self):
+        if hasattr(self.main_window._current_view, 'current_call_timer_lable') and self.context.active_call_timer_object != None:
+            self.main_window._current_view.current_call_timer_lable.config(
+                text = self.context.active_call_timer_object.get_remaining_time(in_centi=False),
+                font=("Helvetica", 36)
+        )
+
+            self.main_window._current_view.after(self.context.show_call_update_rate, 
+                                                 self._update_current_call)
+
+    def end_call_timer(self):
+        self.context.active_call_timer_object.stop()
+        if hasattr(self.main_window._current_view, 'current_call_timer_lable'):
+            self.main_window._current_view.after_cancel(self._update_current_call)
+
     """ -- WIDGET WINDOW LOGIC -- """
 
     # SETTINGS

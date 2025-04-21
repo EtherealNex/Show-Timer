@@ -17,18 +17,18 @@ class PreShowView(tk.Frame):
 
         show_call_button = tk.Button(self.call_frame, text='Next Show Call',
                                       font=("Helvetica", 14), width=15,
-                                      #command =
+                                      command = self.controller.load_start_next_call,
                                       relief='solid', border=2)
         show_call_button.pack(side='top', pady=10)
 
-        next_call_label = tk.Label(self.call_frame, text=f"Next Call: N/A", fg="lightgrey", font=("Helvetica", 14))
-        next_call_label.pack()
+        self.next_call_label = tk.Label(self.call_frame, text=f"Next Call: {self.context.settings_pre_show_calls[0].label}", fg="lightgrey", font=("Helvetica", 14))
+        self.next_call_label.pack()
 
-        current_call_label = tk.Label(self.call_frame, text="Current Call:", font=("Helvetica", 16))
-        current_call_label.pack(pady=2)
+        self.current_call_label = tk.Label(self.call_frame, text="Current Call: N/A", font=("Helvetica", 16))
+        self.current_call_label.pack(pady=2)
 
-        current_call_timer_lable = tk.Label(self.call_frame, text="00:00:00", font=("Helvetica", 36), fg='lightgrey')
-        current_call_timer_lable.pack(pady=0)
+        self.current_call_timer_lable = tk.Label(self.call_frame, text="", font=("Helvetica", 0), fg='lightgrey')
+        self.current_call_timer_lable.pack(pady=0)
 
 
         """ -- CENTER LABEL AND GLOBAL TIMER -- """
