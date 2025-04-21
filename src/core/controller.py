@@ -108,6 +108,7 @@ class AppController:
         if hasattr(self.main_window._current_view, 'begginers_time_label') and hasattr(self.main_window._current_view, 'interval_timer_label'):
             self.main_window._current_view.after_cancel(self._update_interval_timers)
 
+
     """ --  Local Clock Update Task -- """
     def start_local_clock_updates(self):
         if hasattr(self.main_window._current_view, 'local_timer_label'):
@@ -183,8 +184,8 @@ class AppController:
         if hasattr(self.main_window._current_view, 'current_call_timer_lable'):
             self.main_window._current_view.after_cancel(self._update_current_call)
 
-    """ -- WIDGET WINDOW LOGIC -- """
 
+    """ -- WIDGET WINDOW LOGIC -- """
     # SETTINGS
     def open_setting_window(self):
         if not self.context.settings_window_open:
