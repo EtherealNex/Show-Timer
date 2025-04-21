@@ -8,7 +8,7 @@ class MainShowView(tk.Frame):
         self.controller = controller
 
         """ -- STOP SHOW -- """
-        self.stop_show_button = tk.Button(self, text="Toggle Show Stop", font=("Helvetica", 14), width=15,
+        self.stop_show_button = tk.Button(self, text="Show Stop", font=("Helvetica", 14), width=15,
                                      command = self.controller.start_show_stop,
                                      fg='red',
                                      relief='solid', borderwidth=2,

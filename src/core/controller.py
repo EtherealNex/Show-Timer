@@ -60,7 +60,7 @@ class AppController:
     def change_to_interval(self):
         # End previous segment clocks
         self.stop_local_clock_updates()
-        self.stop_show_stop_clock()
+        self.stop_show_stopclock()
 
         # Update the context
         self.context.completed_intervals += 1
@@ -83,7 +83,7 @@ class AppController:
     def show_end(self):
         # End previous segment clocks, must be ran while prev segment is the current window
         self.stop_local_clock_updates()
-        self.stop_main_show_stopwatch()
+        self.stop_main_show_clocks()
 
         # Refresh the end of show frame, set the view
         self.show_end_view.__init__(context=self.context, controller=self)
@@ -99,16 +99,18 @@ class AppController:
         # Update the show stop command
         if hasattr(self.main_window._current_view, 'stop_show_button'):
             self.main_window._current_view.stop_show_button.config(
-                command = self.stop_show_stop_clock
+                text='End Show Stop',
+                command = self.stop_show_stopclock
             )
 
-    def stop_show_stop_clock(self):
+    def stop_show_stopclock(self):
         # Stop the show stop clock, will be called when the user swaps to an interval view.
         self.context.show_stop_stopwatch.stop()
 
         # Update the show stop command
         if hasattr(self.main_window._current_view, 'stop_show_button'):
             self.main_window._current_view.stop_show_button.config(
+                text='Show Stop',
                 command = self.start_show_stop
             )
 

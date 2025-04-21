@@ -69,7 +69,6 @@ class Clock:
             # Set the starting variables
             self._running = True
             self.record_start = time.localtime()
-            self._start_time = time.time()
 
             # Start the thread
             self._update_thread = threading.Thread(target=self._update, daemon=True)
@@ -128,7 +127,10 @@ class Stopwatch(Clock):
 
             # wait the update_rate, then recursion
             time.sleep(self.update_rate)
-    
+    def start(self):
+        self._start_time = time.time() - self._elapsed_time
+        super().start()
+
     def stop(self):
         """
         Stops the stopwatch, sets the elapsed time to the true value, records the stop time.
@@ -138,7 +140,7 @@ class Stopwatch(Clock):
                 current_time = time.time()
                 self._elapsed_time = (current_time - self._start_time)
                 super().stop()
-                
+
 
     def reset(self):
         """Stops the timer, resets elapsed time, starting time, recorded start, and recorded stopping time"""
@@ -203,6 +205,10 @@ class Timer(Clock):
                     break
     
             time.sleep(self.update_rate)
+
+    def start(self):
+        self._start_time = time.time()
+        super().start()
 
 
     def stop(self):
