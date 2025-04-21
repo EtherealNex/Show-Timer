@@ -1,7 +1,9 @@
 # App Context holds all shared states
 
-from src.core.models import * # Import Datastructures needed
+from src.core.models import Call
+
 from src.core.clock import LocalTime
+from src.core.clock import Timer
 
 class AppContext:
     def __init__(self):
@@ -11,10 +13,19 @@ class AppContext:
         self.local_time = LocalTime()
 
         # Pre Show Calls
-        self.pre_show_calls = [] # A list for now, later to be gotten from settings
+        self.show_call_update_rate = 10
+        
+        self.settings_pre_show_calls = [  # SETTINGS TO BE UPDATED 
+                                Call(label="Quater", duration=10), # Normally 600
+                                Call(label="Five", duration=300),
+                                Call(label="Begginers", duration=10)
+                                ]
+        
+        self.current_call_index = 0
+        self.active_call_timer_object: object | None = Timer(overflow=False)
 
         # Interval context
-        self.settings_interval_count = 1
+        self.settings_interval_count = 1 # SETTINGS TO BE UPDATED
         self.completed_intervals = 0 
 
         # Widget window context
