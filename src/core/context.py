@@ -2,7 +2,10 @@
 
 from src.core.models import Call
 
+from src.core.models import Call
+
 from src.core.clock import LocalTime
+from src.core.clock import Timer
 from src.core.clock import Timer
 
 class AppContext:
@@ -25,7 +28,7 @@ class AppContext:
         self.active_call_timer_object: object | None = Timer(overflow=False)
 
         # Interval context
-        self.settings_interval_count = 1 # SETTINGS TO BE UPDATED
+        self.settings_interval_count = 1 # SETTINGS TO BE UPDATED # SETTINGS TO BE UPDATED
         self.completed_intervals = 0 
 
         # Widget window context
