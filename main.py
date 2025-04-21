@@ -5,6 +5,7 @@ from src.core.context import AppContext
 from src.core.controller import AppController
 
 def main():
+    # Application setup
     app = MainWindow()
     context = AppContext()
     controller = AppController(main_window=app, context=context)
@@ -12,9 +13,8 @@ def main():
     # Start the local clock
     context.local_time.start()
 
-    # Set the main view
+    # Set the initial view, then run the mainloop
     controller.load_initial_view()
-    
     app.mainloop()
 
 if __name__ == "__main__":

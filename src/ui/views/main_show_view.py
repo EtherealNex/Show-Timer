@@ -8,23 +8,23 @@ class MainShowView(tk.Frame):
         self.controller = controller
 
         """ -- STOP SHOW -- """
-        stop_show_button = tk.Button(self, text="Stop Show", font=("Helvetica", 14), width=15,
-                                     # command
+        self.stop_show_button = tk.Button(self, text="Toggle Show Stop", font=("Helvetica", 14), width=15,
+                                     command = self.controller.start_show_stop,
                                      fg='red',
                                      relief='solid', borderwidth=2,
                                      highlightthickness=0)
-        stop_show_button.pack(side='top', pady=10)
+        self.stop_show_button.pack(side='top', pady=10)
 
         """ -- CENTER FRAME TIMERS -- """
 
         self.center_frame = tk.Frame(self)
         self.center_frame.pack(expand=True)
 
-        show_stopped_timer_label = tk.Label(self.center_frame, font=("Helvetica", 36, "bold"), text="TE:MP:ST:OP", fg="#D32F2F")
-        show_stopped_timer_label.pack(side='top', pady=5)
+        self.show_stopped_timer_label = tk.Label(self.center_frame, font=("Helvetica", 36, "bold"), text="", fg="#D32F2F")
+        self.show_stopped_timer_label.pack(side='top', pady=5)
 
-        main_show_timer_label = tk.Label(self.center_frame, font=("Helvetica", 48), text='00:00:00:00')
-        main_show_timer_label.pack(pady=(0, 5))
+        self.main_show_timer_label = tk.Label(self.center_frame, font=("Helvetica", 48), text='00:00:00:00')
+        self.main_show_timer_label.pack(pady=(0, 5))
 
         self.local_timer_label = tk.Label(self.center_frame, text="00:00:00", font=("Helvetica", 42), fg="lightgrey")
         self.local_timer_label.pack()

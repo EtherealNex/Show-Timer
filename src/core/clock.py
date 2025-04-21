@@ -138,6 +138,7 @@ class Stopwatch(Clock):
                 current_time = time.time()
                 self._elapsed_time = (current_time - self._start_time)
                 super().stop()
+                
 
     def reset(self):
         """Stops the timer, resets elapsed time, starting time, recorded start, and recorded stopping time"""

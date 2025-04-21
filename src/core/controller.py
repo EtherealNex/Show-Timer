@@ -22,7 +22,7 @@ class AppController:
         self.interval_view = IntervalView(context=context, controller=self)
         self.show_end_view = ShowEndView(context=context, controller=self)
 
-    """ -- FRAME CHANGING -- """
+    """ -- Frame Changing -- """
 
     def load_initial_view(self):
         self.pre_show_view.__init__(context=self.context, controller=self)
@@ -43,7 +43,10 @@ class AppController:
 
         # Determine this frames logic
         self.main_show_next_button_setter()
+
+        # Start clocks
         self.start_local_clock_updates()
+        self.start_main_show_stopwatch() # This can just call start again as the start function checks to see if we have already started
     
 
     # Determine what the next frame / logic should be for the next button in the main show
@@ -57,6 +60,7 @@ class AppController:
     def change_to_interval(self):
         # End previous segment clocks
         self.stop_local_clock_updates()
+        self.stop_show_stop_clock()
 
         # Update the context
         self.context.completed_intervals += 1
@@ -77,12 +81,66 @@ class AppController:
         self.start_interval_timer_updates()
 
     def show_end(self):
-        # End previous segment clocks
+        # End previous segment clocks, must be ran while prev segment is the current window
         self.stop_local_clock_updates()
+        self.stop_main_show_stopwatch()
 
         # Refresh the end of show frame, set the view
         self.show_end_view.__init__(context=self.context, controller=self)
         self.main_window._set_view(self.show_end_view)
+
+
+    """ -- Main Show Clocks -- """   
+    def start_show_stop(self):
+        # Start the show stop clock, No need to start the updater as this is done by the main timer.
+        self.context.show_stop_stopwatch.start()
+        self.context.show_stop_visible = True # Once a show stop occours, make sure to leave the show stop timer on screen always
+
+        # Update the show stop command
+        if hasattr(self.main_window._current_view, 'stop_show_button'):
+            self.main_window._current_view.stop_show_button.config(
+                command = self.stop_show_stop_clock
+            )
+
+    def stop_show_stop_clock(self):
+        # Stop the show stop clock, will be called when the user swaps to an interval view.
+        self.context.show_stop_stopwatch.stop()
+
+        # Update the show stop command
+        if hasattr(self.main_window._current_view, 'stop_show_button'):
+            self.main_window._current_view.stop_show_button.config(
+                command = self.start_show_stop
+            )
+
+    def start_main_show_stopwatch(self):
+        # Starts the main show stopwatch, and calls the view updater
+        self.context.main_show_stopwatch.start()
+        self._update_main_show_clocks()
+    
+    def stop_main_show_clocks(self):
+        # Stops the main show stopwatch, only occours on show_end
+        self.context.main_show_stopwatch.stop()
+        self.context.show_stop_stopwatch.stop() # Ensure this stops too
+
+        self.main_window._current_view.after_cancel(self._update_main_show_clocks)
+
+    
+    def _update_main_show_clocks(self):
+        # Updates all the main window clocks, initally just the show stop timer
+        if hasattr(self.main_window._current_view, 'show_stopped_timer_label') and self.context.show_stop_visible:
+            self.main_window._current_view.show_stopped_timer_label.config(
+                text=self.context.show_stop_stopwatch.get_time(in_centi=True)
+            )
+        
+        if hasattr(self.main_window._current_view, 'main_show_timer_label'):
+            self.main_window._current_view.main_show_timer_label.config(
+                text=self.context.main_show_stopwatch.get_time(in_centi=True)
+            )
+        
+        self.main_window._current_view.after(self.context.main_show_update_rate, self._update_main_show_clocks)
+
+
+
 
     """ -- Interval Clock Update Task -- """
     def start_interval_timer_updates(self):
@@ -130,7 +188,7 @@ class AppController:
             self.main_window._current_view.after_cancel(self._update_local_clock)
 
 
-    """ -- SHOW CALL LOGIC -- """
+    """ -- Show Call Logic -- """
     def load_start_next_call(self):
         # Load the Call timer, increment the call index, move on 
 
@@ -185,7 +243,7 @@ class AppController:
             self.main_window._current_view.after_cancel(self._update_current_call)
 
 
-    """ -- WIDGET WINDOW LOGIC -- """
+    """ -- Widget Window Logic -- """
     # SETTINGS
     def open_setting_window(self):
         if not self.context.settings_window_open:

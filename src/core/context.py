@@ -1,12 +1,12 @@
-# App Context holds all shared states
+# App Context holds all shared states.
 
 from src.core.models import Call
 
-from src.core.models import Call
-
+# Load these seperatly as they may move later on.
 from src.core.clock import LocalTime
 from src.core.clock import Timer
-from src.core.clock import Timer
+from src.core.clock import Stopwatch
+
 
 class AppContext:
     def __init__(self):
@@ -24,8 +24,16 @@ class AppContext:
                                 Call(label="Begginers", duration=10)
                                 ]
         
-        self.current_call_index = 0
+        self.current_call_index: int = 0
         self.active_call_timer_object: object | None = Timer(overflow=False)
+
+        # Main Show Stopwatches
+        self.main_show_update_rate = 10
+
+        self.main_show_stopwatch: object = Stopwatch()
+
+        self.show_stop_visible = False
+        self.show_stop_stopwatch: object = Stopwatch()
 
         # Interval context
         self.settings_interval_count = 1 # SETTINGS TO BE UPDATED
