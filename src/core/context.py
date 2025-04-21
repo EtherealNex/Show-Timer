@@ -19,9 +19,9 @@ class AppContext:
         self.show_call_update_rate = 10
         
         self.settings_pre_show_calls = [  # SETTINGS TO BE UPDATED 
-                                Call(label="Quater", duration=10), # Normally 600
+                                Call(label="Quater", duration=600), # Normally 600 (10m)
                                 Call(label="Five", duration=300),
-                                Call(label="Begginers", duration=10)
+                                Call(label="Begginers", duration=300)
                                 ]
         
         self.current_call_index: int = 0
@@ -40,7 +40,7 @@ class AppContext:
         self.completed_intervals = 0 
 
         self.interval_update_rate = 10
-        self.interval_length = 10 # 15 * 60 seconds, SETTINGS TO BE UPDATED
+        self.interval_length = 900 # 15 * 60 seconds, SETTINGS TO BE UPDATED
 
         # Interval timers, Begginers is 5m before the end of the interval
         self.interval_timer = Timer(time=self.interval_length, overflow=True)
