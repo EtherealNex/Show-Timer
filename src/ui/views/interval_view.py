@@ -8,17 +8,17 @@ class IntervalView(tk.Frame):
         self.context = context
         self.controller = controller
 
-        begginers_label = tk.Label(self, text='Begginers', font=("Helvetica", 16), fg='lightgrey')
+        begginers_label = tk.Label(self, text='Begginers:', font=("Helvetica", 16), fg='lightgrey')
         begginers_label.pack(pady=5)
         
-        begginers_time_label = tk.Label(self, text="TE:MP:00", font=("Helvetica", 14), fg='lightgrey')
-        begginers_time_label.pack(pady=2)
+        self.begginers_time_label = tk.Label(self, text="", font=("Helvetica", 14), fg='lightgrey')
+        self.begginers_time_label.pack(pady=2)
 
         self.center_frame = tk.Frame(self)
         self.center_frame.pack(expand=True)
 
-        interval_timer_label = tk.Label(self.center_frame, text="00:00:00", font=("Helvetica", 48))
-        interval_timer_label.pack(pady=(0,5))
+        self.interval_timer_label = tk.Label(self.center_frame, text="00:00:00", font=("Helvetica", 48))
+        self.interval_timer_label.pack(pady=(0,5))
 
         self.local_timer_label = tk.Label(self.center_frame, text="00:00:00", font=("Helvetica", 42), fg='lightgrey')
         self.local_timer_label.pack()

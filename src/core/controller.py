@@ -35,6 +35,7 @@ class AppController:
     def change_to_main_show_view(self):
         # End previous segment clocks
         self.stop_local_clock_updates()
+        self.stop_interval_timers()
 
         # Refresh the main show frame, determine the next button, set the view 
         self.main_show_view.__init__(context=self.context, controller=self)
@@ -60,12 +61,20 @@ class AppController:
         # Update the context
         self.context.completed_intervals += 1
 
+        # Stop, Reset the clocks and then start the interval timers
+        self.context.interval_timer.reset()
+        self.context.interval_begginers_call_timer.reset()
+        self.context.interval_timer.start()
+        self.context.interval_begginers_call_timer.start()
+
+
         # Refresh the interval frame, set the view
         self.interval_view.__init__(context=self.context, controller=self)
         self.main_window._set_view(self.interval_view)
 
         # Determine this frames logic
         self.start_local_clock_updates()
+        self.start_interval_timer_updates()
 
     def show_end(self):
         # End previous segment clocks
@@ -74,6 +83,30 @@ class AppController:
         # Refresh the end of show frame, set the view
         self.show_end_view.__init__(context=self.context, controller=self)
         self.main_window._set_view(self.show_end_view)
+
+    """ -- Interval Clock Update Task -- """
+    def start_interval_timer_updates(self):
+        if hasattr(self.main_window._current_view, 'begginers_time_label') and hasattr(self.main_window._current_view, 'interval_timer_label'):
+            self._update_interval_timers()
+    
+    def _update_interval_timers(self):
+        if hasattr(self.main_window._current_view, 'begginers_time_label') and hasattr(self.main_window._current_view, 'interval_timer_label'):
+            self.main_window._current_view.begginers_time_label.config(
+                text=self.context.interval_begginers_call_timer.get_remaining_time(in_centi=False),
+                font=("Helvetica", 36)
+            )
+
+            self.main_window._current_view.interval_timer_label.config(
+                text=self.context.interval_timer.get_remaining_time(in_centi=False)
+                )
+            
+            self.main_window._current_view.after(self.context.interval_update_rate, self._update_interval_timers)
+
+    def stop_interval_timers(self):
+        self.context.interval_begginers_call_timer.stop()
+        self.context.interval_timer.stop()
+        if hasattr(self.main_window._current_view, 'begginers_time_label') and hasattr(self.main_window._current_view, 'interval_timer_label'):
+            self.main_window._current_view.after_cancel(self._update_interval_timers)
 
     """ --  Local Clock Update Task -- """
     def start_local_clock_updates(self):

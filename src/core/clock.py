@@ -78,6 +78,7 @@ class Clock:
     def stop(self):
         self._running = False
         self._start_time = None
+        self._update_thread.join()
         self.record_stop = time.localtime()
     
     def _update(self):
@@ -194,9 +195,6 @@ class Timer(Clock):
             with self._lock:
                 current_time = time.time()
                 self._remaining_time = self._duration - (current_time - self._start_time)
-
-                if abs(self._remaining_time) < epsilon:
-                    self._remaining_time = 0
 
                 if self._remaining_time <= 0 and not self.overflow:
                     self._remaining_time = 0

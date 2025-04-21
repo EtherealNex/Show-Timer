@@ -28,8 +28,15 @@ class AppContext:
         self.active_call_timer_object: object | None = Timer(overflow=False)
 
         # Interval context
-        self.settings_interval_count = 1 # SETTINGS TO BE UPDATED # SETTINGS TO BE UPDATED
+        self.settings_interval_count = 1 # SETTINGS TO BE UPDATED
         self.completed_intervals = 0 
+
+        self.interval_update_rate = 10
+        self.interval_length = 10 # 15 * 60 seconds, SETTINGS TO BE UPDATED
+
+        # Interval timers, Begginers is 5m before the end of the interval
+        self.interval_timer = Timer(time=self.interval_length, overflow=True)
+        self.interval_begginers_call_timer = Timer(time=(self.interval_length - 300), overflow=False)
 
         # Widget window context
         self.settings_window_open = False
