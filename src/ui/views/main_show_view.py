@@ -20,7 +20,7 @@ class MainShowView(tk.Frame):
         self.center_frame = tk.Frame(self)
         self.center_frame.pack(expand=True)
 
-        self.show_stopped_timer_label = tk.Label(self.center_frame, font=("Helvetica", 36, "bold"), text="", fg="#D32F2F")
+        self.show_stopped_timer_label = tk.Label(self.center_frame, font=("Helvetica", 0, "bold"), text="", fg="#D32F2F")
         self.show_stopped_timer_label.pack(side='top', pady=5)
 
         self.main_show_timer_label = tk.Label(self.center_frame, font=("Helvetica", 48), text='00:00:00:00')

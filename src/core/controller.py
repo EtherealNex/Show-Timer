@@ -125,13 +125,13 @@ class AppController:
         self.context.show_stop_stopwatch.stop() # Ensure this stops too
 
         self.main_window._current_view.after_cancel(self._update_main_show_clocks)
-
-    
+  
     def _update_main_show_clocks(self):
         # Updates all the main window clocks, initally just the show stop timer
         if hasattr(self.main_window._current_view, 'show_stopped_timer_label') and self.context.show_stop_visible:
             self.main_window._current_view.show_stopped_timer_label.config(
-                text=self.context.show_stop_stopwatch.get_time(in_centi=True)
+                text=self.context.show_stop_stopwatch.get_time(in_centi=True),
+                font=("Helvetica", 36, "bold")
             )
         
         if hasattr(self.main_window._current_view, 'main_show_timer_label'):
@@ -140,8 +140,6 @@ class AppController:
             )
         
         self.main_window._current_view.after(self.context.main_show_update_rate, self._update_main_show_clocks)
-
-
 
 
     """ -- Interval Clock Update Task -- """
