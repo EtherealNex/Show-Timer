@@ -3,8 +3,9 @@
 import tkinter as tk
 
 class MainWindow(tk.Tk):
-    def __init__(self):
+    def __init__(self, context):
         super().__init__()
+        self.context = context
         self.title("Show Timer")
         self.geometry("800x500")
         self._current_view = None

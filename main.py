@@ -6,8 +6,8 @@ from src.core.controller import AppController
 
 def main():
     # Application setup
-    app = MainWindow()
     context = AppContext()
+    app = MainWindow(context=context)
     controller = AppController(main_window=app, context=context)
 
     # Start the local clock
