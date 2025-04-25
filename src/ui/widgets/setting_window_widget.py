@@ -4,20 +4,20 @@
 
 import tkinter as tk
 
-class SettingsWindow:
+class SettingsWindow(tk.Tk):
     def __init__(self, context, controller):
+        super().__init__()
         self.context = context
         self.controller = controller
 
-        self.root = tk.Tk()
-        self.root.geometry("450x450")
-        self.root.resizable(False, False)
-        self.root.title("Show Timer Settings")
+        self.geometry("450x450")
+        self.resizable(False, False)
+        self.title("Show Timer Settings")
 
         # When the window is closed, allow it to reopen again
-        self.root.bind("<Destroy>", controller.on_settings_destory)
+        self.bind("<Destroy>", controller.on_settings_destory)
 
         """ -- UI CODE -- """
 
-        header_label = tk.Label(self.root, text='Settings', font=("Helvetica", 30))
+        header_label = tk.Label(self, text='Settings', font=("Helvetica", 30))
         header_label.pack(anchor='center', pady=10)

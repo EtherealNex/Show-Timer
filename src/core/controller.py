@@ -8,7 +8,8 @@ from src.ui.views.show_end_view import ShowEndView
 
 # Import the pop out window widgets
 from src.ui.widgets.setting_window_widget import SettingsWindow
-from src.ui.widgets.show_stats_widget import ShowStats
+from src.ui.widgets.large_time_widget import TimerWindow
+
 # from src.ui.widgets.large_time_widget # This will be implimented after Show Timer joins the DSManager App.
 
 class AppController:
@@ -17,10 +18,18 @@ class AppController:
         self.context = context
 
         # Initilise all frames
-        self.pre_show_view = PreShowView(context=context, controller=self)
-        self.main_show_view = MainShowView(context=context, controller=self)
-        self.interval_view = IntervalView(context=context, controller=self)
-        self.show_end_view = ShowEndView(context=context, controller=self)
+        self.pre_show_view = PreShowView(context=self.context, controller=self)
+        self.main_show_view = MainShowView(context=self.context, controller=self)
+        self.interval_view = IntervalView(context=self.context, controller=self)
+        self.show_end_view = ShowEndView(context=self.context, controller=self)
+
+        # Initilise all widgets
+        self.settings_widget = SettingsWindow(context=self.context, controller=self)
+        self.timer_widget = TimerWindow(context=self.context, controller=self)
+
+        # Close all the widgets
+        self.settings_widget.destroy()
+        self.timer_widget.destroy()
 
     """ -- Frame Changing -- """
 
@@ -248,19 +257,42 @@ class AppController:
     def open_setting_window(self):
         if not self.context.settings_window_open:
             self.context.settings_window_open = True
-            settings_window = SettingsWindow(self.context, self)
+            self.settings_widget.__init__(context=self.context, controller=self)
 
     # Manage closing the window
     def on_settings_destory(self, event):
         self.context.settings_window_open = False
 
-    # STATS
-    def open_stats_window(self):
-        if not self.context.show_stats_window_open:
-            self.context.show_stats_window_open = True
-            stats_window = ShowStats(self.context, self)
+    # Large Timer Widget
+    def open_timer_window(self):
+        if not self.context.timer_window_open:
+            self.context.timer_window_open = True
+            self.timer_widget.__init__(context=self.context, controller=self)
 
-    # Manage Closing the window
-    def on_stats_window_destory(self, event):
-        self.context.show_stats_window_open = False
+            self.start_local_clock_timer_widget()
+    
+    def on_timer_window_destroy(self, event):
+        self.context.timer_window_open = False
+        
+        self.stop_local_clock_timer_widget()
 
+    def start_local_clock_timer_widget(self):
+        if hasattr(self.timer_widget, 'local_timer_label'):
+            self._update_local_clock_timer_widget()
+
+    def _update_local_clock_timer_widget(self):
+        if hasattr(self.timer_widget, 'local_timer_label'):
+            # Get width and height, then calcuate font size
+            window_width = self.timer_widget.winfo_width()
+            window_height = self.timer_widget.winfo_height()
+            font_size = 112
+
+            self.timer_widget.local_timer_label.config(
+                text=self.context.local_time.get_time(),
+                font=("Helvetica", font_size)
+            )
+            self.timer_widget.after(self.context.local_time_update_interval, self._update_local_clock_timer_widget)
+
+    def stop_local_clock_timer_widget(self):
+        if hasattr(self.timer_widget, 'local_timer_label'):
+            self.timer_widget.after_cancel(self._update_local_clock_timer_widget)

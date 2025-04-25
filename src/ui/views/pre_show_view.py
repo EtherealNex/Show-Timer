@@ -53,8 +53,8 @@ class PreShowView(tk.Frame):
         start_show_button = tk.Button(start_frame, text="Start Show", font=("Helvetica", 14), width=20, command=self.controller.change_to_main_show_view)
         start_show_button.pack(anchor='center')
 
-        view_show_stats = tk.Button(self.button_frame, text='Show Stats', font=("Helvetica", 14), width=10, command=controller.open_stats_window)
-        view_show_stats.grid(column=0, row=0, padx=5)
+        view_timer_window = tk.Button(self.button_frame, text='Pop-Out Clock', font=("Helvetica", 14), width=10, command=controller.open_timer_window)
+        view_timer_window.grid(column=0, row=0, padx=5)
 
         settings_window_button = tk.Button(self.button_frame, text="Settings", font=("Helvetica", 14), width=10, command=controller.open_setting_window)
         settings_window_button.grid(column=1, row=0, padx=5)
