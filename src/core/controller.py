@@ -10,6 +10,8 @@ from src.ui.views.show_end_view import ShowEndView
 from src.ui.widgets.setting_window_widget import SettingsWindow
 from src.ui.widgets.large_time_widget import TimerWindow
 
+import math
+
 # from src.ui.widgets.large_time_widget # This will be implimented after Show Timer joins the DSManager App.
 
 class AppController:
@@ -284,8 +286,7 @@ class AppController:
         if hasattr(self.timer_widget, 'local_timer_label'):
             # Get width and height, then calcuate font size
             window_width = self.timer_widget.winfo_width()
-            window_height = self.timer_widget.winfo_height()
-            font_size = 112
+            font_size = math.trunc(window_width * 2 / 11)
 
             self.timer_widget.local_timer_label.config(
                 text=self.context.local_time.get_time(),

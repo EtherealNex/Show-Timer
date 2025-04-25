@@ -11,6 +11,7 @@ class TimerWindow(tk.Tk):
         self.title("Show Timer Clock")
         self.geometry("1000x400")
         self.resizable(True, True)
+        self.minsize(width=530, height=240)
 
         # Bind the closing button.
         self.bind("<Destroy>", self.controller.on_timer_window_destroy)
