@@ -27,7 +27,9 @@ class AppController:
 
         # Initilise all widgets
         self.settings_widget = SettingsWindow(context=self.context, controller=self)
+
         self.timer_widget = TimerWindow(context=self.context, controller=self)
+        self.timer_widget_updater_id = None
 
         # Close all the widgets
         self.settings_widget.destroy()
@@ -267,6 +269,7 @@ class AppController:
 
     # Large Timer Widget
     def open_timer_window(self):
+
         if not self.context.timer_window_open:
             self.context.timer_window_open = True
             self.timer_widget.__init__(context=self.context, controller=self)
@@ -274,15 +277,16 @@ class AppController:
             self.start_local_clock_timer_widget()
     
     def on_timer_window_destroy(self, event):
-        self.context.timer_window_open = False
-        
+
         self.stop_local_clock_timer_widget()
+        self.context.timer_window_open = False
 
     def start_local_clock_timer_widget(self):
         if hasattr(self.timer_widget, 'local_timer_label'):
             self._update_local_clock_timer_widget()
 
     def _update_local_clock_timer_widget(self):
+
         if hasattr(self.timer_widget, 'local_timer_label'):
             # Get width and height, then calcuate font size
             window_width = self.timer_widget.winfo_width()
@@ -292,8 +296,14 @@ class AppController:
                 text=self.context.local_time.get_time(),
                 font=("Helvetica", font_size)
             )
-            self.timer_widget.after(self.context.local_time_update_interval, self._update_local_clock_timer_widget)
+
+            self.timer_widget_updater_id = self.timer_widget.after(
+                self.context.local_time_update_interval, 
+                self._update_local_clock_timer_widget
+                )
+
 
     def stop_local_clock_timer_widget(self):
-        if hasattr(self.timer_widget, 'local_timer_label'):
-            self.timer_widget.after_cancel(self._update_local_clock_timer_widget)
+        if hasattr(self.timer_widget, 'local_timer_label') and self.timer_widget_updater_id:
+            self.timer_widget.after_cancel(self.timer_widget_updater_id)
+            self.timer_widget_updater_id = None
