@@ -49,3 +49,21 @@ class AppContext:
         # Widget window context
         self.settings_window_open = False
         self.timer_window_open = False
+
+    def reset(self):
+        """The Reset function is used to avoid reinitilising the entire context.
+This will prevent issues in the future when things needs to be gotten from the settings.
+And allows a tighter easier controll over what is reset when the show timer is reset."""
+        # Reset Call context
+        self.current_call_index = 0
+        self.active_call_timer_object.stop()
+        self.active_call_timer_object = Timer(overflow=True)
+
+        self.main_show_stopwatch.reset()
+        self.show_stop_visible = False
+        self.show_stop_stopwatch.reset()
+
+        self.completed_intervals = 0
+        self.interval_timer.reset()
+        self.interval_begginers_call_timer.reset()
+

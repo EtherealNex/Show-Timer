@@ -49,6 +49,7 @@ class AppController:
         # End previous segment clocks
         self.stop_local_clock_updates()
         self.stop_interval_timers()
+        self.end_call_timer()
 
         # Refresh the main show frame, determine the next button, set the view 
         self.main_show_view.__init__(context=self.context, controller=self)
@@ -101,6 +102,33 @@ class AppController:
         # Refresh the end of show frame, set the view
         self.show_end_view.__init__(context=self.context, controller=self)
         self.main_window._set_view(self.show_end_view)
+    
+    """ -- Show Insight Control -- """
+    def start_new_show(self):
+        # Starting a new show will: 
+
+
+
+        # Reinitilise the Context, intern restarting all the timers, and resettings the clocks
+        self.stop_all_timers() # Redundant but helpful cleanup
+        self.context.reset()
+
+        # go to the main window.
+        self.load_initial_view()
+    
+
+
+    def save_show(self):
+        ...
+        # Saveing the show will automatically start a new show
+        self.start_new_show()
+
+    def stop_all_timers(self):
+        # This is almost redundancy but ensures a good clean up of clocks
+        self.end_call_timer()
+        self.stop_main_show_clocks()
+        self.stop_interval_timers()
+        self.stop_local_clock_updates()
 
 
     """ -- Main Show Clocks -- """   
@@ -301,7 +329,6 @@ class AppController:
                 self.context.local_time_update_interval, 
                 self._update_local_clock_timer_widget
                 )
-
 
     def stop_local_clock_timer_widget(self):
         if hasattr(self.timer_widget, 'local_timer_label') and self.timer_widget_updater_id:
