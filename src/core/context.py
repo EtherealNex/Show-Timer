@@ -67,6 +67,7 @@ class AppContext:
         """The Reset function is used to avoid reinitilising the entire context.
 This will prevent issues in the future when things needs to be gotten from the settings.
 And allows a tighter easier controll over what is reset when the show timer is reset."""
+        
         # Reset Call context
         self.current_call_index = 0
         self.active_call_timer_object.stop()

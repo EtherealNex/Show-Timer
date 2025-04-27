@@ -53,6 +53,10 @@ class AppController:
         self.stop_interval_timers()
         self.end_call_timer()
 
+        # Ensure that the settings window is closed to prevent user changing settings mid show
+        if self.context.settings_window_open:
+            self.settings_widget.destroy()
+
         # Whenever we go to the main show view we want to append the local time to the context array
         self.context.acts_list.append(Clock.get_local_time_struct())
 
@@ -220,8 +224,6 @@ class AppController:
             frame = self.build_insight_frame(self.show_end_view.show_data_frame, f'{name}', start_time_str, end_time_str, deltatime_str)
             frame.pack(fill='x', padx=5)
             self.show_end_view.canvas.configure(scrollregion=self.show_end_view.canvas.bbox("all"))
-    
-        
 
     def build_insight_frame(self, parent_frame: tk.Frame, title: str, start: str, end: str, deltatime: str):
         """ Build the frame that gets appended to the insights page """
