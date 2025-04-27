@@ -10,13 +10,15 @@ from src.core.clock import Stopwatch
 
 class AppContext:
     def __init__(self):
-        
+        """ -- Functionality settings -- """
+        self.common_update_interval = 10
+
         # Local time
-        self.local_time_update_interval = 10
+        self.local_time_update_interval = self.common_update_interval
         self.local_time = LocalTime()
 
         # Pre Show Calls
-        self.show_call_update_rate = 10
+        self.show_call_update_rate = self.common_update_interval
         
         self.settings_pre_show_calls = [  # SETTINGS TO BE UPDATED 
                                 Call(label="Quater", duration=600), # Normally 600 (10m)
@@ -28,7 +30,7 @@ class AppContext:
         self.active_call_timer_object: object | None = Timer(overflow=False)
 
         # Main Show Stopwatches
-        self.main_show_update_rate = 10
+        self.main_show_update_rate = self.common_update_interval
 
         self.main_show_stopwatch: object = Stopwatch()
 
@@ -39,7 +41,7 @@ class AppContext:
         self.settings_interval_count = 1 # SETTINGS TO BE UPDATED
         self.completed_intervals = 0 
 
-        self.interval_update_rate = 10
+        self.interval_update_rate = self.common_update_interval
         self.interval_length = 900 # 15 * 60 seconds, SETTINGS TO BE UPDATED
 
         # Interval timers, Begginers is 5m before the end of the interval
@@ -49,6 +51,17 @@ class AppContext:
         # Widget window context
         self.settings_window_open = False
         self.timer_window_open = False
+
+
+        """ -- Insight variables -- """
+        # Insight variables contain local time sturctures that tell the program when a clock was started or stopped.
+
+        self.acts_list = [] # A list of when Acts were started and stopped
+        self.interval_list = [] # A list of when intervals were started and stopped.
+
+        self.total_show_time: int = 0 # A second value of how long the total timer was.
+        self.total_show_stopped_time: int = 0 # A second value of how long the show was stopped for in the end.
+        self.total_stage_time: int = 0 # A seconds value of the total stage time, this is subtracting show stops, and the interval.
 
     def reset(self):
         """The Reset function is used to avoid reinitilising the entire context.
@@ -66,4 +79,11 @@ And allows a tighter easier controll over what is reset when the show timer is r
         self.completed_intervals = 0
         self.interval_timer.reset()
         self.interval_begginers_call_timer.reset()
+
+        # Reset insight settings
+        self.acts_list.clear()
+        self.interval_list.clear()
+        self.total_show_time = 0
+        self.total_show_stopped_time = 0
+        self.total_stage_time = 0
 

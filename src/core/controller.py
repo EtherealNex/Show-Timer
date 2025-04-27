@@ -10,7 +10,9 @@ from src.ui.views.show_end_view import ShowEndView
 from src.ui.widgets.setting_window_widget import SettingsWindow
 from src.ui.widgets.large_time_widget import TimerWindow
 
-import math
+from src.core.clock import Clock, Formatter
+import math, tkinter as tk
+from time import struct_time
 
 # from src.ui.widgets.large_time_widget # This will be implimented after Show Timer joins the DSManager App.
 
@@ -51,6 +53,13 @@ class AppController:
         self.stop_interval_timers()
         self.end_call_timer()
 
+        # Whenever we go to the main show view we want to append the local time to the context array
+        self.context.acts_list.append(Clock.get_local_time_struct())
+
+        # We want to append an interval end time to the context, but only if the interval was actually triggered and not on the start of the show
+        if self.context.completed_intervals != 0: # If we have Finsihed an interval
+            self.context.interval_list.append(Clock.get_local_time_struct())
+
         # Refresh the main show frame, determine the next button, set the view 
         self.main_show_view.__init__(context=self.context, controller=self)
         self.main_window._set_view(self.main_show_view)
@@ -70,11 +79,16 @@ class AppController:
         else:
             self.main_show_view.next_segment_button.config(text="Act Down", command=self.change_to_interval)
 
-
     def change_to_interval(self):
         # End previous segment clocks
         self.stop_local_clock_updates()
         self.stop_show_stopclock()
+
+        # Append the local time to the acts list in context
+        self.context.acts_list.append(Clock.get_local_time_struct())
+
+        # We want to append the time we went to the interval to the context whenever we go here
+        self.context.interval_list.append(Clock.get_local_time_struct())
 
         # Update the context
         self.context.completed_intervals += 1
@@ -99,24 +113,66 @@ class AppController:
         self.stop_local_clock_updates()
         self.stop_main_show_clocks()
 
+        # Finally append an ending show time to context to make sure the acts list is even.
+        self.context.acts_list.append(Clock.get_local_time_struct())
+
+        # Set show context for final timers
+        self.context.total_show_time = self.context.main_show_stopwatch.get_time_in_seconds()
+        self.context.total_show_stopped_time = self.context.show_stop_stopwatch.get_time_in_seconds()
+
+        # Calculate the total stage time
+        # Take the Total Time, Subtract the show stopped time
+        self.context.total_stage_time = self.context.total_show_time - self.context.total_show_stopped_time
+        # Take this new time and itterate through the intervals subtracting their time
+        for i in range(0, len(self.context.interval_list) - 1, 2): #e.g, time1, time2, time3, time4
+            interval_start = self.context.interval_list[i]
+            interval_end = self.context.interval_list[i + 1]
+            
+            interval_length = Clock.delta_local_clock_time(interval_start, interval_end)
+            self.context.total_stage_time -= interval_length
+            
+
         # Refresh the end of show frame, set the view
         self.show_end_view.__init__(context=self.context, controller=self)
+
+        # Building the insight data
+        self.determine_insights()
         self.main_window._set_view(self.show_end_view)
+
+
+        # Set the key info text
+        if hasattr(self.main_window._current_view, 'total_show_stop_time_label'):
+            self.main_window._current_view.total_show_stop_time_label.config(
+                text=f'Show Stopped Time: {Formatter.format_centi(self.context.total_show_stopped_time)}'
+            )
+        
+        if hasattr(self.main_window._current_view, 'total_stage_time_label'):
+            self.main_window._current_view.total_stage_time_label.config(
+                text=f'Total Stage Time: {Formatter.format_centi(self.context.total_stage_time)}'
+            )
+        
+        if hasattr(self.main_window._current_view, 'total_show_time_label'):
+            self.main_window._current_view.total_show_time_label.config(
+                text=f'Total Show Time: {Formatter.format_centi(self.context.total_show_time)}'
+            )
+
+
+        if hasattr(self.main_window._current_view, 'show_start_stop_local_time_label'):
+            show_start = Clock.get_time_struct_formatted(self.context.acts_list[0])
+            show_end = Clock.get_time_struct_formatted(self.context.acts_list[-1])
+            self.main_window._current_view.show_start_stop_local_time_label.config(
+                text=f'Start: {show_start} | End: {show_end}'
+            )
     
     """ -- Show Insight Control -- """
     def start_new_show(self):
         # Starting a new show will: 
-
-
-
         # Reinitilise the Context, intern restarting all the timers, and resettings the clocks
         self.stop_all_timers() # Redundant but helpful cleanup
         self.context.reset()
 
         # go to the main window.
         self.load_initial_view()
-    
-
 
     def save_show(self):
         ...
@@ -130,6 +186,55 @@ class AppController:
         self.stop_interval_timers()
         self.stop_local_clock_updates()
 
+    def determine_insights(self):
+
+        # Calculate how many insights there should be bassed off of the interval count
+        INSIGHT_COUNT = (self.context.settings_interval_count * 2) + 1
+        
+        # Track acts and intervals
+        act_index = 0
+        interval_index = 0
+
+        # Itterate through the insight count 
+        for i in range(INSIGHT_COUNT):
+            # Calculate act or interval
+            if i % 2 == 0: # Even index == Act
+                name = f'Act {i // 2 + 1}:'
+                start_time = (self.context.acts_list[act_index])
+                end_time = (self.context.acts_list[act_index + 1])
+                act_index += 2 # Skip the 2 we have already done
+
+            else: # Odd == Interval
+                name = f'Interval {i // 2 + 1}:' if self.context.settings_interval_count > 1 else f'Interval:'
+                start_time = self.context.interval_list[interval_index]
+                end_time = self.context.interval_list[interval_index + 1]
+                interval_index += 2
+
+
+            start_time_str = Clock.get_time_struct_formatted(start_time)
+            end_time_str = Clock.get_time_struct_formatted(end_time)
+
+            deltatime = Clock.delta_local_clock_time(start_time, end_time)
+            deltatime_str = Formatter.format_secs(deltatime)
+
+            frame = self.build_insight_frame(self.show_end_view.show_data_frame, f'{name}', start_time_str, end_time_str, deltatime_str)
+            frame.pack(fill='x', padx=5)
+            self.show_end_view.canvas.configure(scrollregion=self.show_end_view.canvas.bbox("all"))
+    
+        
+
+    def build_insight_frame(self, parent_frame: tk.Frame, title: str, start: str, end: str, deltatime: str):
+        """ Build the frame that gets appended to the insights page """
+
+        insight_frame = tk.Frame(parent_frame)
+        insight_frame.pack(fill='x', expand=True) 
+
+        # Now pack the labels inside the insight_frame
+        tk.Label(insight_frame, text=f'{title}', font=("Helvetica", 24)).pack(anchor='w', padx=20)  # Left aligned
+        tk.Label(insight_frame, text=f'Start: {start} | End: {end}', font=("Helvetica", 20)).pack(anchor='center', padx=40)  # Centered
+        tk.Label(insight_frame, text=f'{deltatime}', font=("Helvetica", 20)).pack(anchor='center', padx=40)  # Centered
+
+        return insight_frame
 
     """ -- Main Show Clocks -- """   
     def start_show_stop(self):

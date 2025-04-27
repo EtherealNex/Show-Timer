@@ -52,6 +52,23 @@ class Formatter:
 
 class Clock:
     """The clock superclass that will handle alot of common functionality"""
+    @staticmethod
+    def get_local_time_struct() -> time.struct_time:
+        """Returns a time struct from the time libary"""
+        return time.localtime()
+    
+    @staticmethod
+    def get_time_struct_formatted(time_struct: time.struct_time) -> str:
+        """Returns the time struct formmatted in HH:MM:SS"""
+        return(time.strftime("%H:%M:%S", time_struct))
+    
+    @staticmethod
+    def delta_local_clock_time(time1: time.struct_time, time2: time.struct_time) -> int:
+        """delta local clock time will calcuate the time between 2 local time time structures, returning the result as an int repressenting seconds"""
+        time1 = time.mktime(time1)
+        time2 = time.mktime(time2)
+        return int(time2 - time1)
+
     def __init__(self):
         # Common variables
         self._running = False
@@ -157,6 +174,9 @@ class Stopwatch(Clock):
         if not isinstance(in_centi, bool):
             raise TypeError(f"in_centi expected bool, but got {type(in_centi).__name__}")
         return Formatter.format_centi(self._elapsed_time) if in_centi else Formatter.format_secs(self._elapsed_time)
+    
+    def get_time_in_seconds(self):
+        return self._elapsed_time
     
 class Timer(Clock):
     """
@@ -278,7 +298,7 @@ if __name__ == "__main__":
     # Test the stopwatch
     test_stopwatch = False
     test_timer = False
-    test_local = True
+    test_local = False
 
     if test_stopwatch:
 
