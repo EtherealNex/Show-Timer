@@ -12,9 +12,6 @@ from src.ui.widgets.large_time_widget import TimerWindow
 
 from src.core.clock import Clock, Formatter
 import math, tkinter as tk
-from time import struct_time
-
-# from src.ui.widgets.large_time_widget # This will be implimented after Show Timer joins the DSManager App.
 
 class AppController:
     def __init__(self, main_window, context):
@@ -179,6 +176,8 @@ class AppController:
         self.load_initial_view()
 
     def save_show(self):
+        # This func will be updated in the furture to start creating a show report when we get to the full application, 
+        # for now it will just save the show to a JSON file, but later this functionality will be expanded.
         ...
         # Saveing the show will automatically start a new show
         self.start_new_show()
