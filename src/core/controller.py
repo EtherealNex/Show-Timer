@@ -305,6 +305,19 @@ class AppController:
                 text=self.context.interval_timer.get_remaining_time(in_centi=False)
                 )
             
+            # If the interval timer gets below 300s, change the BG to amber, if below 0 change to red
+            if self.context.interval_timer.get_real_remaining_time() < 300: # Only run bg update code if below 5m 
+                # Determine the colour
+                colour = self.context.interval_red if self.context.interval_timer.get_real_remaining_time() < 0 else self.context.interval_amber
+                # Change all BG's to amber except the interval timer and local clock
+                self.main_window._current_view.configure(background=colour)
+                self.main_window._current_view.begginers_time_label.configure(background=colour)
+                self.main_window._current_view.begginers_label.configure(background=colour)
+                self.main_window._current_view.end_interval_button.config(highlightbackground=colour, background=colour)
+
+                # Give the main interval timer and local clock a border
+                self.main_window._current_view.center_frame.config(borderwidth=3, relief='solid')
+            
             self.main_window._current_view.after(self.context.interval_update_rate, self._update_interval_timers)
 
     def stop_interval_timers(self):

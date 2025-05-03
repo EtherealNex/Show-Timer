@@ -8,8 +8,8 @@ class IntervalView(tk.Frame):
         self.context = context
         self.controller = controller
 
-        begginers_label = tk.Label(self, text='Begginers:', font=("Helvetica", 16), fg='lightgrey')
-        begginers_label.pack(pady=5)
+        self.begginers_label = tk.Label(self, text='Begginers:', font=("Helvetica", 16), fg='lightgrey')
+        self.begginers_label.pack(pady=5)
         
         self.begginers_time_label = tk.Label(self, text="", font=("Helvetica", 14), fg='lightgrey')
         self.begginers_time_label.pack(pady=2)
@@ -23,5 +23,5 @@ class IntervalView(tk.Frame):
         self.local_timer_label = tk.Label(self.center_frame, text="00:00:00", font=("Helvetica", 42), fg='lightgrey')
         self.local_timer_label.pack()
 
-        end_interval_button = tk.Button(self, text="End Interval", font=("Helvetica", 14), width=15, command=self.controller.change_to_main_show_view)
-        end_interval_button.pack(side='bottom', pady=20)
+        self.end_interval_button = tk.Button(self,text="End Interval", font=("Helvetica", 14), width=15,command=self.controller.change_to_main_show_view)
+        self.end_interval_button.pack(side='bottom', pady=20)

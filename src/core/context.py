@@ -48,6 +48,9 @@ class AppContext:
         self.interval_timer = Timer(time=self.interval_length, overflow=True)
         self.interval_begginers_call_timer = Timer(time=(self.interval_length - 300), overflow=False)
 
+        self.interval_amber = "#FFA500" # Amber colour. These are later to be replaced by the settings.
+        self.interval_red = "#FF0000" # Red colour
+
         # Widget window context
         self.settings_window_open = False
         self.timer_window_open = False
