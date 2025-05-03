@@ -286,7 +286,7 @@ class AppController:
                 text=self.context.main_show_stopwatch.get_time(in_centi=True)
             )
         
-        self.main_window._current_view.after(self.context.main_show_update_rate, self._update_main_show_clocks)
+        self.main_window._current_view.after(self.context.common_update_interval, self._update_main_show_clocks)
 
 
     """ -- Interval Clock Update Task -- """
@@ -318,7 +318,7 @@ class AppController:
                 # Give the main interval timer and local clock a border
                 self.main_window._current_view.center_frame.config(borderwidth=3, relief='solid')
             
-            self.main_window._current_view.after(self.context.interval_update_rate, self._update_interval_timers)
+            self.main_window._current_view.after(self.context.common_update_interval, self._update_interval_timers)
 
     def stop_interval_timers(self):
         self.context.interval_begginers_call_timer.stop()
@@ -339,7 +339,7 @@ class AppController:
             )
 
             # Schedule the next update
-            self.main_window._current_view.after(self.context.local_time_update_interval,
+            self.main_window._current_view.after(self.context.common_update_interval,
                                                  self._update_local_clock
                                                  )
     
@@ -394,7 +394,7 @@ class AppController:
                 font=("Helvetica", 36)
         )
 
-            self.main_window._current_view.after(self.context.show_call_update_rate, 
+            self.main_window._current_view.after(self.context.common_update_interval, 
                                                  self._update_current_call)
 
     def end_call_timer(self):
@@ -445,7 +445,7 @@ class AppController:
             )
 
             self.timer_widget_updater_id = self.timer_widget.after(
-                self.context.local_time_update_interval, 
+                self.context.common_update_interval, 
                 self._update_local_clock_timer_widget
                 )
 

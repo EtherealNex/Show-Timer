@@ -14,12 +14,9 @@ class AppContext:
         self.common_update_interval = 10
 
         # Local time
-        self.local_time_update_interval = self.common_update_interval
         self.local_time = LocalTime()
 
         # Pre Show Calls
-        self.show_call_update_rate = self.common_update_interval
-        
         self.settings_pre_show_calls = [  # SETTINGS TO BE UPDATED 
                                 Call(label="Quater", duration=600), # Normally 600 (10m)
                                 Call(label="Five", duration=300),
@@ -30,8 +27,6 @@ class AppContext:
         self.active_call_timer_object: object | None = Timer(overflow=False)
 
         # Main Show Stopwatches
-        self.main_show_update_rate = self.common_update_interval
-
         self.main_show_stopwatch: object = Stopwatch()
 
         self.show_stop_visible = False
@@ -40,8 +35,6 @@ class AppContext:
         # Interval context
         self.settings_interval_count = 1 # SETTINGS TO BE UPDATED
         self.completed_intervals = 0 
-
-        self.interval_update_rate = self.common_update_interval
         self.interval_length = 900 # 15 * 60 seconds, SETTINGS TO BE UPDATED
 
         # Interval timers, Begginers is 5m before the end of the interval
