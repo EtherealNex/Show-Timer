@@ -437,7 +437,8 @@ class AppController:
         if hasattr(self.timer_widget, 'local_timer_label'):
             # Get width and height, then calcuate font size
             window_width = self.timer_widget.winfo_width()
-            font_size = math.trunc(window_width * 2 / 11)
+            window_height = self.timer_widget.winfo_height()
+            font_size = math.trunc(int(0.3 * (window_width * window_height) ** 0.5))
 
             self.timer_widget.local_timer_label.config(
                 text=self.context.local_time.get_time(),
