@@ -231,9 +231,9 @@ class AppController:
         insight_frame.pack(fill='x', expand=True) 
 
         # Now pack the labels inside the insight_frame
-        tk.Label(insight_frame, text=f'{title}', font=("Helvetica", 24)).pack(anchor='w', padx=20)  # Left aligned
-        tk.Label(insight_frame, text=f'Start: {start} | End: {end}', font=("Helvetica", 20)).pack(anchor='center', padx=40)  # Centered
-        tk.Label(insight_frame, text=f'{deltatime}', font=("Helvetica", 20)).pack(anchor='center', padx=40)  # Centered
+        tk.Label(insight_frame, text=f'{title}', font=self.context.font_data.get('insightMainFrameHeadFont')).pack(anchor='w', padx=20)  # Left aligned
+        tk.Label(insight_frame, text=f'Start: {start} | End: {end}', font=self.context.font_data.get('insightSubFrameFont')).pack(anchor='center', padx=40)  # Centered
+        tk.Label(insight_frame, text=f'{deltatime}', font=self.context.font_data.get('insightSubFrameFont')).pack(anchor='center', padx=40)  # Centered
 
         return insight_frame
 
@@ -278,7 +278,7 @@ class AppController:
         if hasattr(self.main_window._current_view, 'show_stopped_timer_label') and self.context.show_stop_visible:
             self.main_window._current_view.show_stopped_timer_label.config(
                 text=self.context.show_stop_stopwatch.get_time(in_centi=True),
-                font=("Helvetica", 36, "bold")
+                font=self.context.font_data.get('showStopFont')
             )
         
         if hasattr(self.main_window._current_view, 'main_show_timer_label'):
@@ -298,7 +298,7 @@ class AppController:
         if hasattr(self.main_window._current_view, 'begginers_time_label') and hasattr(self.main_window._current_view, 'interval_timer_label'):
             self.main_window._current_view.begginers_time_label.config(
                 text=self.context.interval_begginers_call_timer.get_remaining_time(in_centi=False),
-                font=("Helvetica", 36)
+                font=self.context.font_data.get('subTimerFonts')
             )
 
             self.main_window._current_view.interval_timer_label.config(
@@ -391,7 +391,7 @@ class AppController:
         if hasattr(self.main_window._current_view, 'current_call_timer_lable') and self.context.active_call_timer_object != None:
             self.main_window._current_view.current_call_timer_lable.config(
                 text = self.context.active_call_timer_object.get_remaining_time(in_centi=False),
-                font=("Helvetica", 36)
+                font=self.context.font_data.get('subTimerFonts')
         )
 
             self.main_window._current_view.after(self.context.common_update_interval, 

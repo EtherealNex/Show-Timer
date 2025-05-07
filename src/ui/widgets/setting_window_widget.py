@@ -19,5 +19,5 @@ class SettingsWindow(tk.Tk):
 
         """ -- UI CODE -- """
 
-        header_label = tk.Label(self, text='Settings', font=("Helvetica", 30))
+        header_label = tk.Label(self, text='Settings', font=self.context.font_data.get('showStopFont'))
         header_label.pack(anchor='center', pady=10)

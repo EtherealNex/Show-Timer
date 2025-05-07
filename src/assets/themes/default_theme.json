@@ -1,0 +1,80 @@
+{
+    "fonts": {
+        "buttonFont": {
+            "fontFamily": "Helvetica",
+            "fontSize": 14,
+            "fontWeight": "normal"
+        },
+
+        "nextCallLable": {
+            "fontFamily": "Helvetica",
+            "fontSize": 14,
+            "fontWeight": "normal"
+        },
+
+        "subTimerFonts": {
+            "fontFamily": "Helvetica",
+            "fontSize": 36,
+            "fontWeight": "normal"
+        },
+
+        "smallHeadingFont": {
+            "fontFamily": "Helvetica",
+            "fontSize": 16,
+            "fontWeight": "normal"
+        },
+
+        "mainTimerFont": {
+            "fontFamily": "Helvetica",
+            "fontSize": 48,
+            "fontWeight": "normal"
+        },
+
+        "localTimerFont": {
+            "fontFamily": "Helvetica",
+            "fontSize": 42,
+            "fontWeight": "normal"
+        },
+
+        "showStopFont": {
+            "fontFamily": "Helvetica",
+            "fontSize": 36,
+            "fontWeight": "bold"
+        },
+
+        "insightSubHeadingFont": {
+            "fontFamily": "Helvetica",
+            "fontSize": 20,
+            "fontWeight": "italic"
+        },
+
+        "insightSubFrameFont": {
+            "fontFamily": "Helvetica",
+            "fontSize": 20,
+            "fontWeight": "normal"
+        },
+
+        "insightMainFrameHeadFont": {
+            "fontFamily": "Helvetica",
+            "fontSize": 24,
+            "fontWeight": "normal"
+        }
+    },
+
+    "colors": {
+        "backgroundColor": "#323232",
+        "mainTextColor": "#FFFFFF",
+        "subTextColor": "#D3D3D3",
+        "buttonTextColor": "#000000",
+        "buttonBGColor": "#FFFFFF",
+
+        "showStoppedTextColor": "#D32F2F",
+        "showStoppedButtonColor": "#FF0000",
+
+        "intervalRed": "#FF0000",
+        "intervalAmber": "#FFA500"
+
+    }
+
+
+}

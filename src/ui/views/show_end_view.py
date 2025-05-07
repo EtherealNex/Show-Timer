@@ -12,10 +12,10 @@ class ShowEndView(tk.Frame):
         """ -- Header Frame -- """
         header_frame = tk.Frame(self, height=50)
         header_frame.pack(fill="x")
-        tk.Label(header_frame, text='Show Insights', font=("Helvetica", 36, "bold")).pack(side='top', pady=(10,0))
+        tk.Label(header_frame, text='Show Insights', font=self.context.font_data.get('showStopFont')).pack(side='top', pady=(10,0))
 
         self.show_start_stop_local_time_label = tk.Label(header_frame, text='Start: 00:00:00 | End: 00:00:00',
-                                                          font=("Helvetica", 20, 'italic'))
+                                                          font=self.context.font_data.get('insightSubHeadingFont'))
         self.show_start_stop_local_time_label.pack(side='top', pady=5)
 
         # Divider
@@ -62,13 +62,13 @@ class ShowEndView(tk.Frame):
         key_info_frame = tk.Frame(self)
         key_info_frame.pack()
         
-        self.total_show_stop_time_label = tk.Label(key_info_frame, text=f'Show Stopped Time: N/A', font=("Helvetica", 20))
+        self.total_show_stop_time_label = tk.Label(key_info_frame, text=f'Show Stopped Time: N/A', font=self.context.font_data.get('insightSubFrameFont'))
         self.total_show_stop_time_label.pack(anchor='center')
 
-        self.total_stage_time_label = tk.Label(key_info_frame, text=f'Total Stage Time: N/A', font=("Helvetica", 20))
+        self.total_stage_time_label = tk.Label(key_info_frame, text=f'Total Stage Time: N/A', font=self.context.font_data.get('insightSubFrameFont'))
         self.total_stage_time_label.pack(anchor='center')
     
-        self.total_show_time_label = tk.Label(key_info_frame, text=f'Total Show Time: N/A', font=("Helvetica", 20))
+        self.total_show_time_label = tk.Label(key_info_frame, text=f'Total Show Time: N/A', font=self.context.font_data.get('insightSubFrameFont'))
         self.total_show_time_label.pack(anchor='center')
 
         """ -- Next Options -- """
@@ -76,14 +76,14 @@ class ShowEndView(tk.Frame):
         button_frame.pack(side='bottom', pady=3)
 
         # Save Show
-        save_show_button = tk.Button(button_frame, text="Save Show", font=("Helvetica", 14),
+        save_show_button = tk.Button(button_frame, text="Save Show", font=self.context.font_data.get('buttonFont'),
                                      width=12,
                                      command=controller.save_show
                                      )
         save_show_button.grid(column=0, row=0, padx=5)
 
         # New Show
-        new_show_button = tk.Button(button_frame, text="New Show", font=("Helvetica", 14),
+        new_show_button = tk.Button(button_frame, text="New Show", font=self.context.font_data.get('buttonFont'),
                                     width=12,
                                     command=self.controller.start_new_show
                                     )
