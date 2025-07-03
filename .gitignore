@@ -181,3 +181,6 @@ cython_debug/
 
 # REMOVE WHEN APP IS MADE
 app.py
+
+# Test data stuff
+/tests

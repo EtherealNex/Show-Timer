@@ -38,7 +38,7 @@ class Formatter:
         """
         # Get formatted
         sign, hrs, mins, secs, centi = Formatter._format(seconds, include_sign)
-        return f'{sign if include_sign else ""}{hrs:02}:{mins:02}:{secs:02}:{centi:02}'
+        return f'{sign if include_sign else ""}{hrs:02}:{mins:02}:{secs:02}.{centi:02}'
     
     @staticmethod
     def format_secs(seconds: int | float, include_sign: bool = True):

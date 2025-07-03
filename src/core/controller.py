@@ -178,6 +178,23 @@ class AppController:
     def save_show(self):
         # This func will be updated in the furture to start creating a show report when we get to the full application, 
         # for now it will just save the show to a JSON file, but later this functionality will be expanded.
+
+        """This Function Will Save:
+
+            - Show Name (Settings)
+            - Show Run (Calculated based off of previously saved shows)
+
+            - Show Start Time
+            - Show End Time
+            - Total Show Time
+            - Show Stopped Time
+            - Show Stopped Time
+
+            - Each Act's Start and End, And Duration
+            - Each Intervals Start, End, And Duration
+        
+        These will be stored to a JSON file within the userdata.
+        """  
         ...
         # Saveing the show will automatically start a new show
         self.start_new_show()

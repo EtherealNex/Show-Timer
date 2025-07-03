@@ -1,1 +1,14 @@
-Where the user data is to be stored
+User data is fully transparent, any data collected is stored here.
+
+- Show Settings:
+            This stores your settings data and can be manually edited or edited within the app.
+            All data stored here is entered by the user from the settings menu, this determines factors
+            such as how long intervals are, how many intervals (Determining Act Number). As well as the show name
+            the show is saved to if the user chooses to save the show. Other data like show calls are stored here.
+
+- Show Insights:
+            This stores all show data such as show time, start time, end time. And any other vital insight into the
+            show. This provides a clean and easy way to navigate shows. Each show contains runs that are
+            automatically indexed by the program. So that your latest run is last in the list of runs. This data is
+            not processed by the application, this may be later added to the program however this data remains on
+            your local machine.

@@ -22,13 +22,11 @@ class AppContext:
                                 Call(label="Five", duration=300),
                                 Call(label="Begginers", duration=300)
                                 ]
-        
         self.current_call_index: int = 0
         self.active_call_timer_object: object | None = Timer(overflow=False)
 
         # Main Show Stopwatches
         self.main_show_stopwatch: object = Stopwatch()
-
         self.show_stop_visible = False
         self.show_stop_stopwatch: object = Stopwatch()
 
