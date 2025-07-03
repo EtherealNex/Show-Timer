@@ -8,7 +8,7 @@ class MainShowView(tk.Frame):
         self.controller = controller
 
         """ -- STOP SHOW -- """
-        self.stop_show_button = tk.Button(self, text="Show Stop", font=self.context.font_data.get('buttonFont'), width=15,
+        self.stop_show_button = tk.Button(self, text="Show Stop", font=("Helvetica", 14), width=15,
                                      command = self.controller.start_show_stop,
                                      fg='red',
                                      relief='solid', borderwidth=2,
@@ -23,10 +23,10 @@ class MainShowView(tk.Frame):
         self.show_stopped_timer_label = tk.Label(self.center_frame, font=("Helvetica", 0, "bold"), text="", fg="#D32F2F")
         self.show_stopped_timer_label.pack(side='top', pady=5)
 
-        self.main_show_timer_label = tk.Label(self.center_frame, font=self.context.font_data.get('mainTimerFont'), text='00:00:00:00')
+        self.main_show_timer_label = tk.Label(self.center_frame, font=("Helvetica", 48), text='00:00:00:00')
         self.main_show_timer_label.pack(pady=(0, 5))
 
-        self.local_timer_label = tk.Label(self.center_frame, text="00:00:00", font=self.context.font_data.get('localTimerFont'), fg="lightgrey")
+        self.local_timer_label = tk.Label(self.center_frame, text="00:00:00", font=("Helvetica", 42), fg="lightgrey")
         self.local_timer_label.pack()
 
         """ -- NEXT MENU BUTTON -- """

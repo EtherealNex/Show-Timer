@@ -18,7 +18,7 @@ class TimerWindow(tk.Tk):
 
         """ -- UI -- """
 
-        header_label = tk.Label(self, text='Show Timer', font=self.context.font_data.get('mainTimerFont'), fg='lightgrey')
+        header_label = tk.Label(self, text='Show Timer', font=("Helvetica", 48), fg='lightgrey')
         header_label.pack(pady=5)
 
         center_frame = tk.Frame(self)

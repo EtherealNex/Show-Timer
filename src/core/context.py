@@ -7,25 +7,9 @@ from src.core.clock import LocalTime
 from src.core.clock import Timer
 from src.core.clock import Stopwatch
 
-# Json handler
-from src.handlers.json_handler import JSONHandler
-
 
 class AppContext:
-    def __init__(self,
-                  theme_path: str = 'src/assets/themes/default_theme.json',
-                  settings_path: str = 'src/assets/settings.json'
-                  ):
-        
-        """ -- Theme settings -- """
-        self.theme_path = theme_path
-        self.theme_data = JSONHandler.read_json(self.theme_path)
-
-        # Convert the JSON to font objects to use in the program
-        self.font_data = JSONHandler.tk_font(self.theme_data)
-        self.color_data = JSONHandler.tk_color(self.theme_data)
-
-
+    def __init__(self):
         """ -- Functionality settings -- """
         self.common_update_interval = 10
 
