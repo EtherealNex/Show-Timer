@@ -11,6 +11,7 @@ from src.core.clock import Stopwatch
 class AppContext:
     def __init__(self):
         """ -- Functionality settings -- """
+        self.showname = "SHOW NAME" # Changed by the settings on boot
         self.common_update_interval = 10
 
         # Local time

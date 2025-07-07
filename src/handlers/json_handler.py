@@ -21,7 +21,12 @@ class JSONHandler:
         # Load the existing JSON data, or create a new one if none exists.
         if os.path.exists(path):
             with open(path, "r") as file:
-                json_data = json.load(file)
+                try:
+                    json_data = json.load(file)
+                except json.decoder.JSONDecodeError:
+                    json_data = {}
+                file.close()
+
         
         else:
             json_data = {}
@@ -41,6 +46,7 @@ class JSONHandler:
         # Write back to the file
         with open(path, "w") as file:
             json.dump(json_data, file, indent=4)
+            file.close()
 
 
 if __name__ == "__main__":

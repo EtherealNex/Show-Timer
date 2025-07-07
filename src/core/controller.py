@@ -11,6 +11,7 @@ from src.ui.widgets.setting_window_widget import SettingsWindow
 from src.ui.widgets.large_time_widget import TimerWindow
 
 from src.core.clock import Clock, Formatter
+from src.handlers.json_handler import JSONHandler
 import math, tkinter as tk
 
 class AppController:
@@ -195,7 +196,55 @@ class AppController:
         
         These will be stored to a JSON file within the userdata.
         """  
-        ...
+        
+        show_start = Clock.get_time_struct_formatted(self.context.acts_list[0])
+        show_end = Clock.get_time_struct_formatted(self.context.acts_list[-1])
+
+        show_data = {
+        "Show Name": f"{self.context.showname}",  # Used to route the data
+        "Show Start Time": f"{show_start}",
+        "Show End Time": f"{show_end}",
+        "Total Show Time": f"{Formatter.format_centi(self.context.total_show_time)}",
+        "Show Stopped Time": f"{Formatter.format_centi(self.context.total_show_stopped_time)}",
+        "Acts": {},  
+        "Intervals": {}
+        }
+
+        INSIGHT_COUNT = (self.context.settings_interval_count * 2) + 1
+        act_index = 0
+        interval_index = 0
+        
+        for i in range(INSIGHT_COUNT):
+            if i % 2 == 0: # We are handling ACT data
+                # ACT
+                act_number = i // 2+1
+                start_time = self.context.acts_list[act_index]
+                end_time = self.context.acts_list[act_index + 1]
+                act_index += 2
+
+                show_data['Acts'][f'Act {act_number}'] = {
+                    "Start" : Clock.get_time_struct_formatted(start_time),
+                    "End"   : Clock.get_time_struct_formatted(end_time),
+                    "Duration" : Formatter.format_secs(Clock.delta_local_clock_time(start_time, end_time))
+                }
+
+            else: # We are handling Interval Data
+                interval_number = i // 2 + 1
+                name = f'Interval {interval_number}' if self.context.settings_interval_count > 1 else "Interval"
+
+                start_time = self.context.interval_list[interval_index]
+                end_time = self.context.interval_list[interval_index + 1]
+                interval_index += 2
+
+                show_data['Intervals'][name] = {
+                    "Start" : Clock.get_time_struct_formatted(start_time),
+                    "End"   : Clock.get_time_struct_formatted(end_time),
+                    "Duration" : Formatter.format_secs(Clock.delta_local_clock_time(start_time, end_time))
+                }
+
+        # Save the show to the user data file
+        JSONHandler.ShowWrite("userdata/show_insights.json", show_data)
+
         # Saveing the show will automatically start a new show
         self.start_new_show()
 
