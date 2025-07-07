@@ -9,6 +9,7 @@ from src.ui.views.show_end_view import ShowEndView
 # Import the pop out window widgets
 from src.ui.widgets.setting_window_widget import SettingsWindow
 from src.ui.widgets.large_time_widget import TimerWindow
+from src.ui.widgets.alert import alert
 
 from src.core.clock import Clock, Formatter
 from src.handlers.json_handler import JSONHandler
@@ -35,6 +36,13 @@ class AppController:
         self.settings_widget.destroy()
         self.timer_widget.destroy()
 
+        # Now everything has been initilised, we can get the settings, this way, 
+        # we can also trigger alert functions from here depending on the situation
+
+        failed = self.context.get_settings("userdata/show_settings.json") # This will also cause the settings to apply
+        if failed != 0: # An error has occoured, we must now check the error and return an alert.
+            self.get_alert(fail_flag=failed) # This will run the alert box to show a error of getting settings
+
     """ -- Frame Changing -- """
 
     def load_initial_view(self):
@@ -43,7 +51,6 @@ class AppController:
 
         # Start the local clock
         self.start_local_clock_updates()
-
 
     def change_to_main_show_view(self):
         # End previous segment clocks
@@ -73,7 +80,6 @@ class AppController:
         self.start_local_clock_updates()
         self.start_main_show_stopwatch() # This can just call start again as the start function checks to see if we have already started
     
-
     # Determine what the next frame / logic should be for the next button in the main show
     def main_show_next_button_setter(self):
         if self.context.completed_intervals == self.context.settings_interval_count:
@@ -520,3 +526,18 @@ class AppController:
         if hasattr(self.timer_widget, 'local_timer_label') and self.timer_widget_updater_id:
             self.timer_widget.after_cancel(self.timer_widget_updater_id)
             self.timer_widget_updater_id = None
+
+    """ -- Alert Functionality -- """
+    def get_alert(self, fail_flag) -> None:
+        """`fail_flag` will determine what error message is shown"""
+        error_message = "Placeholder"
+
+        match fail_flag:
+            case 1:
+                error_message = "ERROR: Settings File Corrupted or Missing Data. Reset Settings to Defaults."
+            case 2:
+                error_message = "ERROR: Settings File Does Not Exist. Generated file, Reset Settings to Defaults."
+            case _:
+                error_message = "ERROR: Unknown error please contact."
+
+        alert(message=error_message, title="ERROR")

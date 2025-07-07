@@ -7,6 +7,9 @@ from src.core.clock import LocalTime
 from src.core.clock import Timer
 from src.core.clock import Stopwatch
 
+# Get the JSON handler for reading settings
+from src.handlers.json_handler import JSONHandler
+
 
 class AppContext:
     def __init__(self):
@@ -83,3 +86,13 @@ And allows a tighter easier controll over what is reset when the show timer is r
         self.total_show_stopped_time = 0
         self.total_stage_time = 0
 
+    def get_settings(self, path: str):
+        """Takes `path` to read settings from it through the JSON handler"""
+        settings_dict, fail_flag = JSONHandler.readSettings(path=path)
+
+        # Set up the settings from the imported dict, the handler will always pass in valid settings, may generate a default.
+        # The fail flag is then used to determine what error message to show if any.
+
+        ... # Apply + Replace settings code
+
+        return fail_flag if fail_flag != 0 else 0

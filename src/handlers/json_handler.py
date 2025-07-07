@@ -48,6 +48,54 @@ class JSONHandler:
             json.dump(json_data, file, indent=4)
             file.close()
 
+    @staticmethod
+    def readSettings(path:str) -> dict:
+        """Reads application settings from the `path` and returns the dictonary of settings for
+        later processing.
+        
+        Fail Flag:
+        - 1: File corrupted, or missing data, generating a new settings file.
+        - 2: File does not exist, generating a new file"""
+        settings_dict = {}
+        default_settings = {}
+
+        fail_flag = 0
+
+        # Load the existing file, if none exists, create a new default file.
+        if os.path.exists(path):
+
+            with open(path, 'r') as file:
+                try:
+                    settings_dict = json.load(file)
+                    file.close()
+
+                except json.decoder.JSONDecodeError:
+                    fail_flag = 1 # File corrupted error
+
+        else: # File doesn't exist, error
+            fail_flag = 2
+
+        if fail_flag != 0: # We need to write the defualt settings if anything fails.
+            settings_dict = default_settings
+            JSONHandler.writeSettings(path=path, settings_data=settings_dict)
+
+        return settings_dict, fail_flag
+    
+    @staticmethod
+    def writeSettings(path: str, settings_data: dict) -> None:
+        """Writes passed in dictionary to the settings JSON file. Ensure that entered data contains all correct fields"""
+        
+        """Fields needed:
+        `Show name` - The name of the show file it will save as.
+        `pre show calls` - A dictonary of calls, their name, and length in seconds.
+        `interval count` - How many intervals the show will run with.
+        `interval length` - How long every interval will be.
+        """
+
+        with open(path, 'w') as file:
+            json.dump(settings_data, file, indent=4)
+            file.close()
+
 
 if __name__ == "__main__":
     testdata = {
