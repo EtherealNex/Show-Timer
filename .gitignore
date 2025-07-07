@@ -184,3 +184,4 @@ app.py
 
 # Test data stuff
 /tests
+*.json
