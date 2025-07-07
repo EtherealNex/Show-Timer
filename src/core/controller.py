@@ -11,9 +11,11 @@ from src.ui.widgets.setting_window_widget import SettingsWindow
 from src.ui.widgets.large_time_widget import TimerWindow
 from src.ui.widgets.alert import alert
 
+from src.core.models import Call
+
 from src.core.clock import Clock, Formatter
 from src.handlers.json_handler import JSONHandler
-import math, tkinter as tk
+import math, ast, tkinter as tk
 
 class AppController:
     def __init__(self, main_window, context):
@@ -82,7 +84,7 @@ class AppController:
     
     # Determine what the next frame / logic should be for the next button in the main show
     def main_show_next_button_setter(self):
-        if self.context.completed_intervals == self.context.settings_interval_count:
+        if int(self.context.completed_intervals) >= int(self.context.settings_interval_count):
             self.main_show_view.next_segment_button.config(text="End Show", command=self.show_end)
         else:
             self.main_show_view.next_segment_button.config(text="Act Down", command=self.change_to_interval)
@@ -216,7 +218,7 @@ class AppController:
         "Intervals": {}
         }
 
-        INSIGHT_COUNT = (self.context.settings_interval_count * 2) + 1
+        INSIGHT_COUNT = (int(self.context.settings_interval_count) * 2) + 1
         act_index = 0
         interval_index = 0
         
@@ -236,7 +238,7 @@ class AppController:
 
             else: # We are handling Interval Data
                 interval_number = i // 2 + 1
-                name = f'Interval {interval_number}' if self.context.settings_interval_count > 1 else "Interval"
+                name = f'Interval {interval_number}' if int(self.context.settings_interval_count) > 1 else "Interval"
 
                 start_time = self.context.interval_list[interval_index]
                 end_time = self.context.interval_list[interval_index + 1]
@@ -264,7 +266,7 @@ class AppController:
     def determine_insights(self):
 
         # Calculate how many insights there should be bassed off of the interval count
-        INSIGHT_COUNT = (self.context.settings_interval_count * 2) + 1
+        INSIGHT_COUNT = (int(self.context.settings_interval_count) * 2) + 1
         
         # Track acts and intervals
         act_index = 0
@@ -280,7 +282,7 @@ class AppController:
                 act_index += 2 # Skip the 2 we have already done
 
             else: # Odd == Interval
-                name = f'Interval {i // 2 + 1}:' if self.context.settings_interval_count > 1 else f'Interval:'
+                name = f'Interval {i // 2 + 1}:' if int(self.context.settings_interval_count) > 1 else f'Interval:'
                 start_time = self.context.interval_list[interval_index]
                 end_time = self.context.interval_list[interval_index + 1]
                 interval_index += 2
@@ -527,16 +529,99 @@ class AppController:
             self.timer_widget.after_cancel(self.timer_widget_updater_id)
             self.timer_widget_updater_id = None
 
+    """ -- Settings Logic -- """
+    def save_settings(self):
+        showName, preShowCall, intervalCount, intervalLength = self.get_settings()
+        settings = {
+            "showName" : f"{showName}",
+
+            "preShowCall" : self.convert_call_to_json(preShowCall),
+
+            "intervalCount" : intervalCount,
+            "intervalLength": intervalLength
+        }
+        if preShowCall == False:
+            settings = {} # Will raise a write error
+        write_fail = JSONHandler.writeSettings("userdata/show_settings.json", settings)
+
+        if write_fail != 0:
+            self.get_alert(write_fail)
+            return
+        else: # Success, update the settings again
+            self.context.get_settings(path="userdata/show_settings.json")
+
+        # Saving will close the settings window
+        if self.context.settings_window_open:
+            self.settings_widget.destroy()
+
+    def get_settings(self):
+        """Gets the settings from the GUI input box's, returns all the needed variables"""
+        
+        if hasattr(self.settings_widget, "show_name_entry"):
+            showName = self.settings_widget.show_name_entry.get()
+
+        if hasattr(self.settings_widget, "interval_count_entry"):
+            intervalCount = self.settings_widget.interval_count_entry.get()
+        
+        if hasattr(self.settings_widget, "interval_duration_entry"):
+            intervalLength = self.settings_widget.interval_duration_entry.get()
+        
+        if hasattr(self.settings_widget, "show_call_entry"):
+            preShowCall_text = self.settings_widget.show_call_entry.get("1.0", tk.END).strip()
+
+            try:
+                preShowCall = []
+                parsed = ast.literal_eval(f'[{preShowCall_text}]')
+                
+                if not isinstance(parsed, list):
+                    return False, False, False, False
+                
+                for item in parsed:
+                    if not (isinstance(item, tuple) and len(item) == 2):
+                        return False, False, False, False
+                    lable, duration = item
+                    if not (isinstance(lable, str) or not isinstance(duration, int)):
+                        return False, False, False, False
+                    preShowCall.append(Call(label=lable, duration=duration))
+
+            except Exception as e:
+                raise ValueError(f'Failed to parse: {e}')
+
+        return showName, preShowCall, intervalCount, intervalLength
+    
+    def convert_call_to_json(self, call_list):
+        pre_show_call = {}
+
+        for i, call in enumerate(call_list, start=1):
+            key = f'Call {i}'
+            pre_show_call[key] = {
+                "Name" : call.label,
+                "Duration" : call.duration
+            }
+        return pre_show_call
+
+    def get_calls_as_text(self):
+        call_tuples = [(call.label, call.duration) for call in self.context.settings_pre_show_calls]
+        return ', '.join(f'("{label}", {duration})' for label, duration in call_tuples)
+
+
     """ -- Alert Functionality -- """
     def get_alert(self, fail_flag) -> None:
         """`fail_flag` will determine what error message is shown"""
         error_message = "Placeholder"
 
         match fail_flag:
-            case 1:
+            # Reading Settings Error
+            case 100:
                 error_message = "ERROR: Settings File Corrupted or Missing Data. Reset Settings to Defaults."
-            case 2:
-                error_message = "ERROR: Settings File Does Not Exist. Generated file, Reset Settings to Defaults."
+            case 101:
+                error_message = "ERROR: Settings File Does Not Exist. Generated file, Reset to Defaults."
+            
+            # Writing Settings Error
+            case 200:
+                error_message = "ERROR: Unable to save settings due to missing or invalid values."
+
+            # Default Case
             case _:
                 error_message = "ERROR: Unknown error please contact."
 

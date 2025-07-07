@@ -57,7 +57,17 @@ class JSONHandler:
         - 1: File corrupted, or missing data, generating a new settings file.
         - 2: File does not exist, generating a new file"""
         settings_dict = {}
-        default_settings = {}
+        default_settings = {
+            "showName" : "Default Show",
+            "preShowCall" : {
+                "Call 1" : {"Name" : "Quater",     "Duration" : 600},
+                "Call 2" : {"Name" : "Five",       "Duration" : 300},
+                "Call 3" : {"Name" : "Begginers",  "Duration" : 300}
+            },
+
+            "intervalCount" : 1,
+            "intervalLength": 900
+        }
 
         fail_flag = 0
 
@@ -66,23 +76,27 @@ class JSONHandler:
 
             with open(path, 'r') as file:
                 try:
+                    # Read the settings file to pass back to the main updater.
                     settings_dict = json.load(file)
                     file.close()
 
                 except json.decoder.JSONDecodeError:
-                    fail_flag = 1 # File corrupted error
+                    fail_flag = 100 # File corrupted error
 
         else: # File doesn't exist, error
-            fail_flag = 2
+            fail_flag = 101
 
         if fail_flag != 0: # We need to write the defualt settings if anything fails.
             settings_dict = default_settings
             JSONHandler.writeSettings(path=path, settings_data=settings_dict)
+            
+            # If the write fails, we dont need to return the write error code as the fail_flag for any instant on reading
+            # Overrides the fail flags for writing as it is more serious.
 
         return settings_dict, fail_flag
     
     @staticmethod
-    def writeSettings(path: str, settings_data: dict) -> None:
+    def writeSettings(path: str, settings_data: dict) -> int:
         """Writes passed in dictionary to the settings JSON file. Ensure that entered data contains all correct fields"""
         
         """Fields needed:
@@ -92,9 +106,20 @@ class JSONHandler:
         `interval length` - How long every interval will be.
         """
 
-        with open(path, 'w') as file:
-            json.dump(settings_data, file, indent=4)
-            file.close()
+        fail_flag = 0
+        required_keys = ["showName", "preShowCall", "intervalCount", "intervalLength"]
+
+        # Checks to see if all required elemets are there to be saved
+        for required_key in required_keys:
+            if required_key not in settings_data.keys():
+                fail_flag = 200
+
+        if fail_flag == 0: # If any data is not correct then we must not write to the file.
+            with open(path, 'w') as file:
+                json.dump(settings_data, file, indent=4)
+                file.close()
+
+        return fail_flag
 
 
 if __name__ == "__main__":

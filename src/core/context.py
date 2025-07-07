@@ -14,7 +14,7 @@ from src.handlers.json_handler import JSONHandler
 class AppContext:
     def __init__(self):
         """ -- Functionality settings -- """
-        self.showname = "SHOW NAME" # Changed by the settings on boot
+        self.showname = "Placeholder" # Changed by the settings on boot
         self.common_update_interval = 10
 
         # Local time
@@ -93,6 +93,19 @@ And allows a tighter easier controll over what is reset when the show timer is r
         # Set up the settings from the imported dict, the handler will always pass in valid settings, may generate a default.
         # The fail flag is then used to determine what error message to show if any.
 
-        ... # Apply + Replace settings code
+        self.showname = settings_dict['showName']
 
-        return fail_flag if fail_flag != 0 else 0
+        # Replace the calls with the ones from the settings
+        self.settings_pre_show_calls = [
+            Call(label=call.get("Name"), duration=call.get("Duration")) 
+            for call in settings_dict.get('preShowCall', {}).values()
+        ]
+
+        self.settings_interval_count = settings_dict['intervalCount']
+        self.interval_length = int(settings_dict['intervalLength'])
+
+        # Replace the timer
+        self.interval_timer = Timer(time=self.interval_length, overflow=True)
+        self.interval_begginers_call_timer = Timer(time=(self.interval_length - 300), overflow=False)     
+
+        return fail_flag if fail_flag != 0 else 0 # Run the fail messages
