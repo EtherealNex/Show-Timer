@@ -532,16 +532,28 @@ class AppController:
     """ -- Settings Logic -- """
     def save_settings(self):
         showName, preShowCall, intervalCount, intervalLength = self.get_settings()
-        settings = {
-            "showName" : f"{showName}",
 
-            "preShowCall" : self.convert_call_to_json(preShowCall),
-
-            "intervalCount" : intervalCount,
-            "intervalLength": intervalLength
-        }
+        # Checks to see if the interval Count and interval Length are integers, else we cannot procead
+        try:
+            intervalCount = int(intervalCount)
+            intervalLength = int(intervalLength)
+        except ValueError as e:
+            self.get_alert(201)
+            return
+        
         if preShowCall == False:
-            settings = {} # Will raise a write error
+            settings = {}
+            return
+        else:
+            settings = {
+                "showName" : f"{showName}",
+
+                "preShowCall" : self.convert_call_to_json(preShowCall),
+
+                "intervalCount" : intervalCount,
+                "intervalLength": intervalLength
+            }
+
         write_fail = JSONHandler.writeSettings("userdata/show_settings.json", settings)
 
         if write_fail != 0:
@@ -568,24 +580,26 @@ class AppController:
         
         if hasattr(self.settings_widget, "show_call_entry"):
             preShowCall_text = self.settings_widget.show_call_entry.get("1.0", tk.END).strip()
+            error = False, False, False, False
 
             try:
                 preShowCall = []
                 parsed = ast.literal_eval(f'[{preShowCall_text}]')
                 
                 if not isinstance(parsed, list):
-                    return False, False, False, False
+                    return error
                 
                 for item in parsed:
                     if not (isinstance(item, tuple) and len(item) == 2):
-                        return False, False, False, False
+                        return error
                     lable, duration = item
                     if not (isinstance(lable, str) or not isinstance(duration, int)):
-                        return False, False, False, False
+                        return error
                     preShowCall.append(Call(label=lable, duration=duration))
 
             except Exception as e:
-                raise ValueError(f'Failed to parse: {e}')
+                self.get_alert(202)
+                return error
 
         return showName, preShowCall, intervalCount, intervalLength
     
@@ -620,6 +634,10 @@ class AppController:
             # Writing Settings Error
             case 200:
                 error_message = "ERROR: Unable to save settings due to missing or invalid values."
+            case 201:
+                error_message = "ERROR: Invalid integer entered, Unable to Update Settings."
+            case 202:
+                error_message = "ERROR: Invalid Pre Show Call List, Ensure its ('NAME', duration),"
 
             # Default Case
             case _:
