@@ -189,3 +189,6 @@ app.py
 # Non essential Image Assets - The non resized / icon file
 src/assets/Icon-iOS-Dark-1024x1024@1x.png
 src/assets/showtimer.icon
+
+# Hide venv
+.venv/
