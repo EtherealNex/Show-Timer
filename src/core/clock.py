@@ -139,13 +139,13 @@ class Stopwatch(Clock):
         while self._running:
             # Lock the thread, then Get current time, set the elapsed to time since start
             with self._lock:
-                current_time = time.time()
+                current_time = time.monotonic()
                 self._elapsed_time = (current_time - self._start_time)
 
             # wait the update_rate, then recursion
             time.sleep(self.update_rate)
     def start(self):
-        self._start_time = time.time() - self._elapsed_time
+        self._start_time = time.monotonic() - self._elapsed_time
         super().start()
 
     def stop(self):
@@ -154,7 +154,7 @@ class Stopwatch(Clock):
         """
         if self._running:
             with self._lock:
-                current_time = time.time()
+                current_time = time.monotonic()
                 self._elapsed_time = (current_time - self._start_time)
                 super().stop()
 
@@ -216,7 +216,7 @@ class Timer(Clock):
         epsilon = self.update_rate # The smallest tolerance for the program to ensure we dont have bad floating point subtraction
         while self._running:
             with self._lock:
-                current_time = time.time()
+                current_time = time.monotonic()
                 self._remaining_time = self._duration - (current_time - self._start_time)
 
                 if self._remaining_time <= 0 and not self.overflow:
@@ -227,14 +227,14 @@ class Timer(Clock):
             time.sleep(self.update_rate)
 
     def start(self):
-        self._start_time = time.time()
+        self._start_time = time.monotonic()
         super().start()
 
 
     def stop(self):
         if self._running:
             with self._lock:
-                self._remaining_time = self._duration - (time.time() - self._start_time) # Get absolute remaining time
+                self._remaining_time = self._duration - (time.monotonic() - self._start_time) # Get absolute remaining time
                 super().stop()
 
     def reset(self) -> None:
