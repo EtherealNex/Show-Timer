@@ -27,8 +27,8 @@ class PreShowView(tk.Frame):
         self.current_call_label = tk.Label(self.call_frame, text="Current Call: N/A", font=("Helvetica", 16))
         self.current_call_label.pack(pady=2)
 
-        self.current_call_timer_lable = tk.Label(self.call_frame, text="", font=("Helvetica", 0), fg='lightgrey')
-        self.current_call_timer_lable.pack(pady=0)
+        self.current_call_timer_label = tk.Label(self.call_frame, text="", font=("Helvetica", 0), fg='lightgrey')
+        self.current_call_timer_label.pack(pady=0)
 
 
         """ -- CENTER LABEL AND GLOBAL TIMER -- """

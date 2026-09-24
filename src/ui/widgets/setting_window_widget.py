@@ -1,5 +1,5 @@
-# A popout widget that controls the timers settings
-# This settings widget wont be here in the larger app as that will be controlled globaly, however for now this is here
+# A pop-out widget that controls the timers settings
+# This settings widget wont be here in the larger app as that will be controlled globally, however for now this is here
 # When this goes it will be replaced by the large_time_widget.py
 
 import tkinter as tk
@@ -15,7 +15,7 @@ class SettingsWindow(tk.Tk):
         self.title("Show Timer Settings")
 
         # When the window is closed, allow it to reopen again
-        self.bind("<Destroy>", controller.on_settings_destory)
+        self.bind("<Destroy>", controller.on_settings_destroy)
 
         """ -- UI CODE -- """
 

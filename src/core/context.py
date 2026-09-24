@@ -2,7 +2,7 @@
 
 from src.core.models import Call
 
-# Load these seperatly as they may move later on.
+# Load these separately as they may move later on.
 from src.core.clock import LocalTime
 from src.core.clock import Timer
 from src.core.clock import Stopwatch
@@ -22,9 +22,9 @@ class AppContext:
 
         # Pre Show Calls
         self.settings_pre_show_calls = [  # SETTINGS TO BE UPDATED 
-                                Call(label="Quater", duration=600), # Normally 600 (10m)
+                                Call(label="Quarter", duration=600), # Normally 600 (10m)
                                 Call(label="Five", duration=300),
-                                Call(label="Begginers", duration=300)
+                                Call(label="Beginners", duration=300)
                                 ]
         self.current_call_index: int = 0
         self.active_call_timer_object: object | None = Timer(overflow=False)
@@ -39,9 +39,9 @@ class AppContext:
         self.completed_intervals = 0 
         self.interval_length = 900 # 15 * 60 seconds, SETTINGS TO BE UPDATED
 
-        # Interval timers, Begginers is 5m before the end of the interval
+        # Interval timers, beginners is 5m before the end of the interval
         self.interval_timer = Timer(time=self.interval_length, overflow=True)
-        self.interval_begginers_call_timer = Timer(time=(self.interval_length - 300), overflow=False)
+        self.interval_beginners_call_timer = Timer(time=(self.interval_length - 300), overflow=False)
 
         self.interval_amber = "#FFA500" # Amber colour. These are later to be replaced by the settings.
         self.interval_red = "#FF0000" # Red colour
@@ -52,7 +52,7 @@ class AppContext:
 
 
         """ -- Insight variables -- """
-        # Insight variables contain local time sturctures that tell the program when a clock was started or stopped.
+        # Insight variables contain local time structures that tell the program when a clock was started or stopped.
 
         self.acts_list = [] # A list of when Acts were started and stopped
         self.interval_list = [] # A list of when intervals were started and stopped.
@@ -62,9 +62,9 @@ class AppContext:
         self.total_stage_time: int = 0 # A seconds value of the total stage time, this is subtracting show stops, and the interval.
 
     def reset(self):
-        """The Reset function is used to avoid reinitilising the entire context.
+        """The Reset function is used to avoid reinitialising the entire context.
 This will prevent issues in the future when things needs to be gotten from the settings.
-And allows a tighter easier controll over what is reset when the show timer is reset."""
+And allows a tighter easier control over what is reset when the show timer is reset."""
         
         # Reset Call context
         self.current_call_index = 0
@@ -77,7 +77,7 @@ And allows a tighter easier controll over what is reset when the show timer is r
 
         self.completed_intervals = 0
         self.interval_timer.reset()
-        self.interval_begginers_call_timer.reset()
+        self.interval_beginners_call_timer.reset()
 
         # Reset insight settings
         self.acts_list.clear()
@@ -106,6 +106,6 @@ And allows a tighter easier controll over what is reset when the show timer is r
 
         # Replace the timer
         self.interval_timer = Timer(time=self.interval_length, overflow=True)
-        self.interval_begginers_call_timer = Timer(time=(self.interval_length - 300), overflow=False)     
+        self.interval_beginners_call_timer = Timer(time=(self.interval_length - 300), overflow=False)     
 
         return fail_flag if fail_flag != 0 else 0 # Run the fail messages

@@ -22,13 +22,13 @@ class AppController:
         self.main_window = main_window
         self.context = context
 
-        # Initilise all frames
+        # initialise all frames
         self.pre_show_view = PreShowView(context=self.context, controller=self)
         self.main_show_view = MainShowView(context=self.context, controller=self)
         self.interval_view = IntervalView(context=self.context, controller=self)
         self.show_end_view = ShowEndView(context=self.context, controller=self)
 
-        # Initilise all widgets
+        # initialise all widgets
         self.settings_widget = SettingsWindow(context=self.context, controller=self)
 
         self.timer_widget = TimerWindow(context=self.context, controller=self)
@@ -38,11 +38,11 @@ class AppController:
         self.settings_widget.destroy()
         self.timer_widget.destroy()
 
-        # Now everything has been initilised, we can get the settings, this way, 
+        # Now everything has been initialised, we can get the settings, this way, 
         # we can also trigger alert functions from here depending on the situation
 
         failed = self.context.get_settings("userdata/show_settings.json") # This will also cause the settings to apply
-        if failed != 0: # An error has occoured, we must now check the error and return an alert.
+        if failed != 0: # An error has occurred, we must now check the error and return an alert.
             self.get_alert(fail_flag=failed) # This will run the alert box to show a error of getting settings
 
     """ -- Frame Changing -- """
@@ -68,7 +68,7 @@ class AppController:
         self.context.acts_list.append(Clock.get_local_time_struct())
 
         # We want to append an interval end time to the context, but only if the interval was actually triggered and not on the start of the show
-        if self.context.completed_intervals != 0: # If we have Finsihed an interval
+        if self.context.completed_intervals != 0: # If we have finished an interval
             self.context.interval_list.append(Clock.get_local_time_struct())
 
         # Refresh the main show frame, determine the next button, set the view 
@@ -105,9 +105,9 @@ class AppController:
 
         # Stop, Reset the clocks and then start the interval timers
         self.context.interval_timer.reset()
-        self.context.interval_begginers_call_timer.reset()
+        self.context.interval_beginners_call_timer.reset()
         self.context.interval_timer.start()
-        self.context.interval_begginers_call_timer.start()
+        self.context.interval_beginners_call_timer.start()
 
 
         # Refresh the interval frame, set the view
@@ -133,7 +133,7 @@ class AppController:
         # Calculate the total stage time
         # Take the Total Time, Subtract the show stopped time
         self.context.total_stage_time = self.context.total_show_time - self.context.total_show_stopped_time
-        # Take this new time and itterate through the intervals subtracting their time
+        # Take this new time and iterate through the intervals subtracting their time
         for i in range(0, len(self.context.interval_list) - 1, 2): #e.g, time1, time2, time3, time4
             interval_start = self.context.interval_list[i]
             interval_end = self.context.interval_list[i + 1]
@@ -177,7 +177,7 @@ class AppController:
     """ -- Show Insight Control -- """
     def start_new_show(self):
         # Starting a new show will: 
-        # Reinitilise the Context, intern restarting all the timers, and resettings the clocks
+        # reinitialise the Context, intern restarting all the timers, and resetting the clocks
         self.stop_all_timers() # Redundant but helpful cleanup
         self.context.reset()
 
@@ -185,7 +185,7 @@ class AppController:
         self.load_initial_view()
 
     def save_show(self):
-        # This func will be updated in the furture to start creating a show report when we get to the full application, 
+        # This func will be updated in the future to start creating a show report when we get to the full application, 
         # for now it will just save the show to a JSON file, but later this functionality will be expanded.
 
         """This Function Will Save:
@@ -253,7 +253,7 @@ class AppController:
         # Save the show to the user data file
         JSONHandler.ShowWrite("userdata/show_insights.json", show_data)
 
-        # Saveing the show will automatically start a new show
+        # saving the show will automatically start a new show
         self.start_new_show()
 
     def stop_all_timers(self):
@@ -265,14 +265,14 @@ class AppController:
 
     def determine_insights(self):
 
-        # Calculate how many insights there should be bassed off of the interval count
+        # Calculate how many insights there should be based off of the interval count
         INSIGHT_COUNT = (int(self.context.settings_interval_count) * 2) + 1
         
         # Track acts and intervals
         act_index = 0
         interval_index = 0
 
-        # Itterate through the insight count 
+        # iterate through the insight count 
         for i in range(INSIGHT_COUNT):
             # Calculate act or interval
             if i % 2 == 0: # Even index == Act
@@ -306,8 +306,8 @@ class AppController:
 
         # Now pack the labels inside the insight_frame
         tk.Label(insight_frame, text=f'{title}', font=("Helvetica", 24)).pack(anchor='w', padx=20)  # Left aligned
-        tk.Label(insight_frame, text=f'Start: {start} | End: {end}', font=("Helvetica", 20)).pack(anchor='center', padx=40)  # Centered
-        tk.Label(insight_frame, text=f'{deltatime}', font=("Helvetica", 20)).pack(anchor='center', padx=40)  # Centered
+        tk.Label(insight_frame, text=f'Start: {start} | End: {end}', font=("Helvetica", 20)).pack(anchor='center', padx=40)  # centred
+        tk.Label(insight_frame, text=f'{deltatime}', font=("Helvetica", 20)).pack(anchor='center', padx=40)  # centred
 
         return insight_frame
 
@@ -315,7 +315,7 @@ class AppController:
     def start_show_stop(self):
         # Start the show stop clock, No need to start the updater as this is done by the main timer.
         self.context.show_stop_stopwatch.start()
-        self.context.show_stop_visible = True # Once a show stop occours, make sure to leave the show stop timer on screen always
+        self.context.show_stop_visible = True # Once a show stop occurs, make sure to leave the show stop timer on screen always
 
         # Update the show stop command
         if hasattr(self.main_window._current_view, 'stop_show_button'):
@@ -341,14 +341,14 @@ class AppController:
         self._update_main_show_clocks()
     
     def stop_main_show_clocks(self):
-        # Stops the main show stopwatch, only occours on show_end
+        # Stops the main show stopwatch, only occurs on show_end
         self.context.main_show_stopwatch.stop()
         self.context.show_stop_stopwatch.stop() # Ensure this stops too
 
         self.main_window._current_view.after_cancel(self._update_main_show_clocks)
   
     def _update_main_show_clocks(self):
-        # Updates all the main window clocks, initally just the show stop timer
+        # Updates all the main window clocks, initially just the show stop timer
         if hasattr(self.main_window._current_view, 'show_stopped_timer_label') and self.context.show_stop_visible:
             self.main_window._current_view.show_stopped_timer_label.config(
                 text=self.context.show_stop_stopwatch.get_time(in_centi=True),
@@ -365,13 +365,13 @@ class AppController:
 
     """ -- Interval Clock Update Task -- """
     def start_interval_timer_updates(self):
-        if hasattr(self.main_window._current_view, 'begginers_time_label') and hasattr(self.main_window._current_view, 'interval_timer_label'):
+        if hasattr(self.main_window._current_view, 'beginners_time_label') and hasattr(self.main_window._current_view, 'interval_timer_label'):
             self._update_interval_timers()
     
     def _update_interval_timers(self):
-        if hasattr(self.main_window._current_view, 'begginers_time_label') and hasattr(self.main_window._current_view, 'interval_timer_label'):
-            self.main_window._current_view.begginers_time_label.config(
-                text=self.context.interval_begginers_call_timer.get_remaining_time(in_centi=False),
+        if hasattr(self.main_window._current_view, 'beginners_time_label') and hasattr(self.main_window._current_view, 'interval_timer_label'):
+            self.main_window._current_view.beginners_time_label.config(
+                text=self.context.interval_beginners_call_timer.get_remaining_time(in_centi=False),
                 font=("Helvetica", 36)
             )
 
@@ -385,8 +385,8 @@ class AppController:
                 colour = self.context.interval_red if self.context.interval_timer.get_real_remaining_time() < 0 else self.context.interval_amber
                 # Change all BG's to amber except the interval timer and local clock
                 self.main_window._current_view.configure(background=colour)
-                self.main_window._current_view.begginers_time_label.configure(background=colour)
-                self.main_window._current_view.begginers_label.configure(background=colour)
+                self.main_window._current_view.beginners_time_label.configure(background=colour)
+                self.main_window._current_view.beginners_label.configure(background=colour)
                 self.main_window._current_view.end_interval_button.config(highlightbackground=colour, background=colour)
 
                 # Give the main interval timer and local clock a border
@@ -395,9 +395,9 @@ class AppController:
             self.main_window._current_view.after(self.context.common_update_interval, self._update_interval_timers)
 
     def stop_interval_timers(self):
-        self.context.interval_begginers_call_timer.stop()
+        self.context.interval_beginners_call_timer.stop()
         self.context.interval_timer.stop()
-        if hasattr(self.main_window._current_view, 'begginers_time_label') and hasattr(self.main_window._current_view, 'interval_timer_label'):
+        if hasattr(self.main_window._current_view, 'beginners_time_label') and hasattr(self.main_window._current_view, 'interval_timer_label'):
             self.main_window._current_view.after_cancel(self._update_interval_timers)
 
 
@@ -426,7 +426,7 @@ class AppController:
     def load_start_next_call(self):
         # Load the Call timer, increment the call index, move on 
 
-        # Check to see if a call timer is avalible to be used
+        # Check to see if a call timer is available to be used
         if self.context.current_call_index >= len(self.context.settings_pre_show_calls):
             # Update UI
             if hasattr(self.main_window._current_view, 'current_call_label'):
@@ -462,8 +462,8 @@ class AppController:
         self._update_current_call()
 
     def _update_current_call(self):
-        if hasattr(self.main_window._current_view, 'current_call_timer_lable') and self.context.active_call_timer_object != None:
-            self.main_window._current_view.current_call_timer_lable.config(
+        if hasattr(self.main_window._current_view, 'current_call_timer_label') and self.context.active_call_timer_object != None:
+            self.main_window._current_view.current_call_timer_label.config(
                 text = self.context.active_call_timer_object.get_remaining_time(in_centi=False),
                 font=("Helvetica", 36)
         )
@@ -473,7 +473,7 @@ class AppController:
 
     def end_call_timer(self):
         self.context.active_call_timer_object.stop()
-        if hasattr(self.main_window._current_view, 'current_call_timer_lable'):
+        if hasattr(self.main_window._current_view, 'current_call_timer_label'):
             self.main_window._current_view.after_cancel(self._update_current_call)
 
 
@@ -485,7 +485,7 @@ class AppController:
             self.settings_widget.__init__(context=self.context, controller=self)
 
     # Manage closing the window
-    def on_settings_destory(self, event):
+    def on_settings_destroy(self, event):
         self.context.settings_window_open = False
 
     # Large Timer Widget
@@ -509,7 +509,7 @@ class AppController:
     def _update_local_clock_timer_widget(self):
 
         if hasattr(self.timer_widget, 'local_timer_label'):
-            # Get width and height, then calcuate font size
+            # Get width and height, then calculate font size
             window_width = self.timer_widget.winfo_width()
             window_height = self.timer_widget.winfo_height()
             font_size = math.trunc(int(0.3 * (window_width * window_height) ** 0.5))
@@ -538,7 +538,7 @@ class AppController:
     def save_settings(self):
         showName, preShowCall, intervalCount, intervalLength = self.get_settings()
 
-        # Checks to see if the interval Count and interval Length are integers, else we cannot procead
+        # Checks to see if the interval Count and interval Length are integers, else we cannot proceed
         try:
             intervalCount = int(intervalCount)
             intervalLength = int(intervalLength)
@@ -596,10 +596,10 @@ class AppController:
                 for item in parsed:
                     if not (isinstance(item, tuple) and len(item) == 2):
                         return error
-                    lable, duration = item
-                    if not (isinstance(lable, str) or not isinstance(duration, int)):
+                    label, duration = item
+                    if not (isinstance(label, str) or not isinstance(duration, int)):
                         return error
-                    preShowCall.append(Call(label=lable, duration=duration))
+                    preShowCall.append(Call(label=label, duration=duration))
 
             except Exception as e:
                 self.get_alert(202)

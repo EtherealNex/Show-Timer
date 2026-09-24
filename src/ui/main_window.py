@@ -1,4 +1,4 @@
-# The main UI that the app refferances off
+# The main UI that the app references off
 
 import tkinter as tk
 

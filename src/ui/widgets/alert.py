@@ -1,14 +1,14 @@
 # This is a customisable, alert tkinter widget, it is called within the program where needed and creates 
-# a new window with the alert text and a simple close button, this is good for when an error has arrised, 
+# a new window with the alert text and a simple close button, this is good for when an error has raised, 
 # as staying away from console driven program.
 
 import tkinter as tk
 
-def alert(message: str, title: str = "Alert", size: str = "300x100", resiasable: bool = False):
+def alert(message: str, title: str = "Alert", size: str = "300x100", resizable: bool = False):
     # Create the alert window
-    window = tk.Toplevel() # Place the window ontop of everything
+    window = tk.Toplevel() # Place the window on top of everything
     window.title(title)
-    window.resizable(resiasable, resiasable)
+    window.resizable(resizable, resizable)
 
     window.attributes('-topmost', True) # Force it to appear at the top level
 

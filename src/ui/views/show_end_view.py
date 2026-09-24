@@ -50,9 +50,7 @@ class ShowEndView(tk.Frame):
         )
 
         self.canvas.pack(side='left', fill='both', expand=True)
-
-        if int(self.context.settings_interval_count) > 1: # Only place in a scrollbar if there are more than 1 intervals aka > 2 acts. Otherwise standard formatting will cover it
-            self.scrollbar.pack(side='right', fill='y')
+        self.scrollbar.pack(side='right', fill='y')
 
         # Divider
         divider = tk.Frame(self, height=1, bg='lightgrey')

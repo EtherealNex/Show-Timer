@@ -1,13 +1,13 @@
-# @NexLib -> A general libary created by Nex // Heavily modified for Show Timer Efficiancy
+# @NexLib -> A general library created by Nex // Heavily modified for Show Timer efficiency
 
 import time, threading
 
 class Formatter:
-    """A powerfull Time formmatter intended for useage in clock systems."""
+    """A powerful Time formatter intended for usage in clock systems."""
 
     @staticmethod
     def _format(seconds: int | float, include_sign: bool = True):
-        """Returns a tuple (sign, hrs, mins, secs, centi) based off of the seconds inputed"""
+        """Returns a tuple (sign, hrs, mins, secs, centi) based off of the seconds inputted"""
 
         # Determine sign and ensure seconds are valid
         if not isinstance(seconds, (int, float)): # All code runs the format through here so all checks can be carried out here
@@ -15,7 +15,7 @@ class Formatter:
 
         # Check to insure include sign has been passed in as a bool
         if not isinstance(include_sign, bool): 
-            # This isnt used in this function but is a good place to include as all functions must pass throguh this
+            # This isn't used in this function but is a good place to include as all functions must pass through this
             # If this is not needed, the system will give it a True bool value to pass this check
             raise TypeError(f'include sign expected bool, got {type(include_sign).__name__}')
         
@@ -51,20 +51,20 @@ class Formatter:
         return f'{sign if include_sign else ""}{hrs:02}:{mins:02}:{secs:02}'
 
 class Clock:
-    """The clock superclass that will handle alot of common functionality"""
+    """The clock superclass that will handle a lot of common functionality"""
     @staticmethod
     def get_local_time_struct() -> time.struct_time:
-        """Returns a time struct from the time libary"""
+        """Returns a time struct from the time library"""
         return time.localtime()
     
     @staticmethod
     def get_time_struct_formatted(time_struct: time.struct_time) -> str:
-        """Returns the time struct formmatted in HH:MM:SS"""
+        """Returns the time struct formatted in HH:MM:SS"""
         return(time.strftime("%H:%M:%S", time_struct))
     
     @staticmethod
     def delta_local_clock_time(time1: time.struct_time, time2: time.struct_time) -> int:
-        """delta local clock time will calcuate the time between 2 local time time structures, returning the result as an int repressenting seconds"""
+        """delta local clock time will calculate the time between 2 local time time structures, returning the result as an int representing seconds"""
         time1 = time.mktime(time1)
         time2 = time.mktime(time2)
         return int(time2 - time1)
@@ -98,7 +98,7 @@ class Clock:
         self.record_stop = time.localtime()
     
     def _update(self):
-        """Update code must be individualy created for each class that inherits the clock functionality"""
+        """Update code must be individually created for each class that inherits the clock functionality"""
         raise ProcessLookupError(f"""The update function must be created for each class that inherits the Clock.
                                  If you are using this app, please contact the developer.""")
             
@@ -121,7 +121,7 @@ class Stopwatch(Clock):
     A stopwatch that will create a new thread to be ran on keeping your main program running smoothly.
     This clock will tick up.
 
-    Takes a update rate, set to 0.01 seconds by defult
+    Takes a update rate, set to 0.01 seconds by default
     """
     def __init__(self, update_rate: int | float = 0.01):
         super().__init__()
@@ -133,7 +133,7 @@ class Stopwatch(Clock):
         self._elapsed_time = 0
     
     def _update(self):
-        """Updates the stopwatch by getting the time, and subtractig the start time, then waits the update time, then calls itself again"""
+        """Updates the stopwatch by getting the time, and subtracting the start time, then waits the update time, then calls itself again"""
         # Set the threads name
         self._update_thread.name = f"Stopwatch: {id(self)}"
         while self._running:
@@ -170,7 +170,7 @@ class Stopwatch(Clock):
         return self._running
 
     def get_time(self, in_centi: bool = True):
-        """Gets the elapsed time in centi or seconds depending on input, defults to returning in centi"""
+        """Gets the elapsed time in centi or seconds depending on input, defaults to returning in centi"""
         if not isinstance(in_centi, bool):
             raise TypeError(f"in_centi expected bool, but got {type(in_centi).__name__}")
         return Formatter.format_centi(self._elapsed_time) if in_centi else Formatter.format_secs(self._elapsed_time)
@@ -184,9 +184,9 @@ class Timer(Clock):
     
     A Timer that counts down from an input second value. And can overflow to continue counting down or stop.
 
-    Takes a second integer or float, set to 300s (5m) by defult.
-    Takes an overflow bool, set to True by defult.
-    Takes an update_rate, set to 0.01 by defult
+    Takes a second integer or float, set to 300s (5m) by default.
+    Takes an overflow bool, set to True by default.
+    Takes an update_rate, set to 0.01 by default
     """
     def __init__(self, time: int | float = 300, overflow: bool = True, update_rate: int | float = 0.01):
         super().__init__()
@@ -213,7 +213,7 @@ class Timer(Clock):
         if overflow we continue, else we stop the timer
         """
         self._update_thread.name = f'Timer: {id(self)}'
-        epsilon = self.update_rate # The smallest tollerance for the program to ensure we dont have bad floating point subtraction
+        epsilon = self.update_rate # The smallest tolerance for the program to ensure we dont have bad floating point subtraction
         while self._running:
             with self._lock:
                 current_time = time.time()
@@ -243,13 +243,13 @@ class Timer(Clock):
             self._remaining_time = self._duration
 
     def get_remaining_time(self, in_centi: bool = True):
-        """Gets the remaining time in centi or seconds depending on input, defults to returning in centi"""
+        """Gets the remaining time in centi or seconds depending on input, defaults to returning in centi"""
         if not isinstance(in_centi, bool):
             return TypeError(f'in_centi expected bool, got {type(in_centi).__name__}')
         return Formatter.format_centi(self._remaining_time) if in_centi else Formatter.format_secs(self._remaining_time)
         
     def get_real_remaining_time(self) -> int | float:
-        return self._remaining_time # Returns seconds of remaing time
+        return self._remaining_time # Returns seconds of remaining time
 
     def get_running(self):
         return self._running
@@ -286,7 +286,7 @@ class LocalTime:
     
     def get_time(self, in_centi: bool = False):
         """Returns a formatted time for the local time.
-        By default, it returns time in seconds, with an option to include centiseconds."""
+        By default, it returns time in seconds, with an option to include centi-seconds."""
         if not isinstance(in_centi, bool):
             raise TypeError(f'in_centi expected bool, got {type(in_centi).__name__}')
         

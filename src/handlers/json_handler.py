@@ -1,21 +1,21 @@
-# JSON Handler will work with the app to save shows and eventually to revist old shows, This will eventually
+# JSON Handler will work with the app to save shows and eventually to revisit old shows, This will eventually
 # be ported and changed into the larger overall app, where we can go back and read all the old shows.
 import json, os
 
 class JSONHandler:
     """JSON is a static method based class structure that reads, and writes from json files.
-    This implimentation of json handler allows the reading of show data for show timer."""
+    This implementation of json handler allows the reading of show data for show timer."""
     
     @staticmethod
     def ShowWrite(path: str, data: dict):
         """Appends a new run to the correct show in the JSON.
         Expects `path` and `data` and all run information, passed in through the controller of the application"""
 
-        show_name = data.get("Show Name") # Determine the show it is appart of
+        show_name = data.get("Show Name") # Determine the show it is apart of
         if not show_name:
             raise ValueError('Missing Show Name, unable to save.')
         
-        # Remove the show name as to store relevent information
+        # Remove the show name as to store relevant information
         run_data = {k: v for k, v in data.items() if k != "Show Name"}
 
         # Load the existing JSON data, or create a new one if none exists.
@@ -50,7 +50,7 @@ class JSONHandler:
 
     @staticmethod
     def readSettings(path:str) -> dict:
-        """Reads application settings from the `path` and returns the dictonary of settings for
+        """Reads application settings from the `path` and returns the dictionary of settings for
         later processing.
         
         Fail Flag:
@@ -60,9 +60,9 @@ class JSONHandler:
         default_settings = {
             "showName" : "Default Show",
             "preShowCall" : {
-                "Call 1" : {"Name" : "Quater",     "Duration" : 600},
+                "Call 1" : {"Name" : "Quarter",     "Duration" : 600},
                 "Call 2" : {"Name" : "Five",       "Duration" : 300},
-                "Call 3" : {"Name" : "Begginers",  "Duration" : 300}
+                "Call 3" : {"Name" : "Beginners",  "Duration" : 300}
             },
 
             "intervalCount" : 1,
@@ -86,7 +86,7 @@ class JSONHandler:
         else: # File doesn't exist, error
             fail_flag = 101
 
-        if fail_flag != 0: # We need to write the defualt settings if anything fails.
+        if fail_flag != 0: # We need to write the default settings if anything fails.
             settings_dict = default_settings
             JSONHandler.writeSettings(path=path, settings_data=settings_dict)
             
@@ -101,7 +101,7 @@ class JSONHandler:
         
         """Fields needed:
         `Show name` - The name of the show file it will save as.
-        `pre show calls` - A dictonary of calls, their name, and length in seconds.
+        `pre show calls` - A dictionary of calls, their name, and length in seconds.
         `interval count` - How many intervals the show will run with.
         `interval length` - How long every interval will be.
         """
@@ -109,7 +109,7 @@ class JSONHandler:
         fail_flag = 0
         required_keys = ["showName", "preShowCall", "intervalCount", "intervalLength"]
 
-        # Checks to see if all required elemets are there to be saved
+        # Checks to see if all required elements are there to be saved
         for required_key in required_keys:
             if required_key not in settings_data.keys():
                 fail_flag = 200
