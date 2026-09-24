@@ -60,9 +60,9 @@ class JSONHandler:
         default_settings = {
             "showName" : "Default Show",
             "preShowCall" : {
-                "Call 1" : {"Name" : "Quarter",     "Duration" : 600},
-                "Call 2" : {"Name" : "Five",       "Duration" : 300},
-                "Call 3" : {"Name" : "Beginners",  "Duration" : 300}
+                "Call 1" : {"Name" : "18:40 - Quarter",     "Duration" : 600},
+                "Call 2" : {"Name" : "18:50 - Five",       "Duration" : 300},
+                "Call 3" : {"Name" : "18:55 - Beginners",  "Duration" : 300}
             },
 
             "intervalCount" : 1,
