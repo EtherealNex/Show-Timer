@@ -56,5 +56,5 @@ class PreShowView(tk.Frame):
         view_timer_window = tk.Button(self.button_frame, text='Pop-Out Clock', font=("Helvetica", 14), width=10, command=controller.open_timer_window)
         view_timer_window.grid(column=0, row=0, padx=5)
 
-        settings_window_button = tk.Button(self.button_frame, text="Settings", font=("Helvetica", 14), width=10, command=controller.open_setting_window)
+        settings_window_button = tk.Button(self.button_frame, text="Show Settings", font=("Helvetica", 14), width=10, command=controller.open_setting_window)
         settings_window_button.grid(column=1, row=0, padx=5)

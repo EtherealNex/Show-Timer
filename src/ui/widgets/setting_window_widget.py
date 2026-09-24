@@ -11,7 +11,7 @@ class SettingsWindow(tk.Tk):
         self.controller = controller
 
         self.geometry("450x450")
-        self.resizable(False, False)
+        self.minsize(width='300', height='300')
         self.title("Show Timer Settings")
 
         # When the window is closed, allow it to reopen again
@@ -55,7 +55,14 @@ class SettingsWindow(tk.Tk):
         button_frame = tk.Frame(self)
         button_frame.pack(side='bottom', pady=6)
 
-        save_button = tk.Button(button_frame, text="Save",
+        save_button = tk.Button(button_frame, text="Save & Quit",
                                 font=('Helvetica', 14), width=12,
                                 command=self.controller.save_settings)
         save_button.grid(column=0, row=0, padx=15)
+
+        quit_button = tk.Button(button_frame, text="Quit",
+                                font=('Helvetica', 14), width=12,
+                                command=self.controller.quit_settings)
+        quit_button.grid(column=1, row=0, padx=15)
+
+

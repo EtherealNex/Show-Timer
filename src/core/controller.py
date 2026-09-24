@@ -530,6 +530,11 @@ class AppController:
             self.timer_widget_updater_id = None
 
     """ -- Settings Logic -- """
+
+    def quit_settings(self):
+        if self.context.settings_window_open:
+            self.settings_widget.destroy()
+
     def save_settings(self):
         showName, preShowCall, intervalCount, intervalLength = self.get_settings()
 
@@ -563,8 +568,7 @@ class AppController:
             self.context.get_settings(path="userdata/show_settings.json")
 
         # Saving will close the settings window
-        if self.context.settings_window_open:
-            self.settings_widget.destroy()
+        self.quit_settings()
 
     def get_settings(self):
         """Gets the settings from the GUI input box's, returns all the needed variables"""
