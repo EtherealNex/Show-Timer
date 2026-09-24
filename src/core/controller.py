@@ -89,6 +89,8 @@ class AppController:
         else:
             self.main_show_view.next_segment_button.config(text="Act Down", command=self.change_to_interval)
 
+    """ -- Interval Show Control Logic -- """
+
     def change_to_interval(self):
         # End previous segment clocks
         self.stop_local_clock_updates()
@@ -114,9 +116,32 @@ class AppController:
         self.interval_view.__init__(context=self.context, controller=self)
         self.main_window._set_view(self.interval_view)
 
+        # Calculate the act length and apply it to the view
+        act_length = self.determine_act_length_text()
+        self._update_act_length_text(act_length)
+
         # Determine this frames logic
         self.start_local_clock_updates()
         self.start_interval_timer_updates()
+
+    def determine_act_length_text(self) -> str:
+        """This function returns a `string` with a formatted time value corresponding to the length of the previous act.\n
+        If there are not enough `time structs` in the acts_list to determine a length, then the program will return 'N/A'."""
+
+        if len(self.context.acts_list) < 1:
+            return "N/A"
+
+        act_start_time, act_end_time = self.context.acts_list[-2], self.context.acts_list[-1]
+        deltatime_str = Formatter.format_secs(Clock.delta_local_clock_time(act_start_time, act_end_time))
+        return deltatime_str
+
+    def _update_act_length_text(self, formatted_time):
+        """Formats the attribute of the interval page to include the time of the pervious act"""
+        if hasattr(self.main_window._current_view, 'act_timer_length_label'):
+            self.main_window._current_view.act_timer_length_label.config(
+                text=f'Act {self.context.completed_intervals} Length: {formatted_time}',
+                font=("Helvetica", 14, 'italic')
+            )
 
     def show_end(self):
         # End previous segment clocks, must be ran while prev segment is the current window
